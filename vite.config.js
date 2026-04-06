@@ -4,14 +4,9 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // ← Tambahkan ini! Penting untuk Netlify
+  // base: '', // ← Hapus base sama sekali
   server: {
     host: '0.0.0.0',
     port: 5173
-  },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    emptyOutDir: true
   }
 })
