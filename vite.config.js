@@ -4,9 +4,8 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // base: '', // ← Hapus base sama sekali
   server: {
-    host: '0.0.0.0',
+    host: true, // Untuk akses dari jaringan lokal
     port: 5173
   }
 })
