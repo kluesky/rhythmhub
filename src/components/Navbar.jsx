@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -10,6 +9,7 @@ export default function Navbar({ navigateTo, activePage }) {
     { name: 'Beranda', path: '/' },
     { name: 'Tentang', path: '/about' },
     { name: 'Request Game', path: '/request' },
+    { name: 'Admin System', path: '/admin-daily' },
   ]
 
   return (
@@ -25,11 +25,11 @@ export default function Navbar({ navigateTo, activePage }) {
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => navigateTo('/')}
           >
-            <div className="relative">
+            <div className="relative w-10 h-10">
               <img 
                 src={logoSrc} 
                 alt="Logo"
-                className="w-10 h-10 rounded-xl object-cover border border-gray-700 group-hover:border-blue-500 transition-colors shadow-lg shadow-blue-500/10"
+                className="w-full h-full rounded-xl object-cover border border-gray-700 group-hover:border-blue-500 transition-all duration-300 shadow-lg shadow-blue-500/10"
               />
               <div className="absolute inset-0 rounded-xl bg-blue-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
@@ -49,7 +49,7 @@ export default function Navbar({ navigateTo, activePage }) {
                 onClick={() => navigateTo(link.path)}
                 className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${
                   activePage === link.path 
-                  ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20' 
+                  ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(37,99,235,0.1)]' 
                   : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
                 }`}
               >
@@ -62,7 +62,7 @@ export default function Navbar({ navigateTo, activePage }) {
           <div className="md:hidden">
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 bg-[#161b2c] text-gray-400 rounded-xl border border-gray-800 hover:text-white transition-all active:scale-90"
+              className="p-2.5 bg-[#161b2c] text-gray-400 rounded-xl border border-gray-800 hover:text-white transition-all active:scale-90"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isOpen ? (
