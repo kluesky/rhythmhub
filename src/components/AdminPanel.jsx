@@ -11,7 +11,7 @@ export default function AdminPanel({ isOpen, onClose }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const { addToast } = useToast()
 
-  const ADMIN_PASSWORD = 'admin123'
+  const ADMIN_PASSWORD = 'lyora6396'
 
   const loadRequests = async () => {
     setIsLoading(true)
