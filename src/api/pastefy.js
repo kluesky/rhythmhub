@@ -2,7 +2,8 @@
 const PASTEFY_API_URL = 'https://pastefy.app/api/v2'
 const PASTEFY_API_KEY = 'aJLzptOLgwIhDwVRkOTSEXsqnYWKg42aoh3FhxrZ1CgvFooGtKUNkwKVPvzD'
 const PASTEFY_PASTE_ID = 'L0H9sY2c'  // Paste ID untuk request
-const PASTEFY_GAMES_PASTE_ID = 'BHBujUrw'  // Ganti dengan paste ID baru untuk menyimpan games
+const PASTEFY_GAMES_PASTE_ID = 'BHBujUrw' // Paste ID untuk games
+const PASTEFY_USERS_PASTE_ID = 'LvcKPvc9' // ← BUAT PASTE BARU DI PASTE KEY ISI []
 
 // Helper headers
 const getHeaders = () => ({
@@ -201,6 +202,7 @@ export async function addGameToPastefy(gameData) {
       description: gameData.description,
       features: gameData.features ? gameData.features.split(',').map(f => f.trim()) : [],
       modFeatures: gameData.modFeatures ? gameData.modFeatures.split(',').map(f => f.trim()) : [],
+      selectedModTypes: gameData.selectedModTypes || [], // Update untuk pilihan mod
       status: gameData.status || 'success',
       statusText: gameData.statusText || '🟢 Online / Stable',
       createdAt: new Date().toISOString()
@@ -254,22 +256,68 @@ export async function deleteGameFromPastefy(gameId) {
   }
 }
 
-// Update status game (Stable/Warning/Maintenance)
-export async function updateGameStatusOnPastefy(gameId, status, statusText) {
+// ==================== USER ACCOUNTS (Login/Register) ====================
+
+// Ambil semua user dari Pastefy
+export async function getAllUsersFromPastefy() {
   try {
-    const existing = await getAllGamesFromPastefy()
-    const games = existing.games || []
+    const response = await fetch(`${PASTEFY_API_URL}/paste/${PASTEFY_USERS_PASTE_ID}`, {
+      method: 'GET',
+      headers: getHeaders()
+    })
     
-    const updatedGames = games.map(game => 
-      game.id === gameId 
-        ? { ...game, status: status, statusText: statusText, updatedAt: new Date().toISOString() }
-        : game
-    )
-    
-    const saveResult = await saveAllGamesToPastefy(updatedGames)
-    return { success: saveResult.success }
+    const data = await response.json()
+
+    if (response.ok && data && data.content) {
+      try {
+        const parsed = JSON.parse(data.content)
+        return { success: true, users: Array.isArray(parsed) ? parsed : [] }
+      } catch (e) {
+        return { success: true, users: [] }
+      }
+    }
+    return { success: true, users: [] }
   } catch (error) {
-    console.error('Update game status error:', error)
+    return { success: false, error: error.message, users: [] }
+  }
+}
+
+// Simpan data user (Internal)
+async function saveUsersToPastefy(users) {
+  try {
+    const response = await fetch(`${PASTEFY_API_URL}/paste/${PASTEFY_USERS_PASTE_ID}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({ content: JSON.stringify(users, null, 2) })
+    })
+    return { success: response.ok }
+  } catch (error) {
+    return { success: false, error: error.message }
+  }
+}
+
+// Tambah user baru (Register)
+export async function registerNewUser(userData) {
+  try {
+    const existing = await getAllUsersFromPastefy()
+    const users = existing.users || []
+    
+    // Cek apakah username sudah ada
+    if (users.find(u => u.username === userData.username)) {
+      return { success: false, error: 'Username sudah digunakan!' }
+    }
+
+    const newUser = {
+      id: Date.now(),
+      username: userData.username,
+      password: userData.password, // Catatan: Sebaiknya di-encrypt di production
+      role: 'user',
+      createdAt: new Date().toISOString()
+    }
+
+    users.push(newUser)
+    return await saveUsersToPastefy(users)
+  } catch (error) {
     return { success: false, error: error.message }
   }
 }
