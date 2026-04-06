@@ -106,7 +106,7 @@ export default function Auth({ onLoginSuccess }) {
         </div>
         
         <p className="text-center text-gray-600 text-[9px] mt-6 font-bold uppercase tracking-[0.2em]">
-          &copy; 2024 RhythmHub Cloud Database
+          &copy; 2026 RhythmHub Cloud Database
         </p>
       </motion.div>
     </div>
