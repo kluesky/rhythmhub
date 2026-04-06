@@ -197,6 +197,24 @@ export default function AdminGamePanel({ isOpen, onClose }) {
                         </div>
                       </div>
 
+                      {/* PUBLISHER & GENRE GRID */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-1.5 text-white">
+                          <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Publisher</label>
+                          <input type="text" placeholder="SEGA, Mihoyo, etc.." value={formData.publisher} onChange={(e) => setFormData({...formData, publisher: e.target.value})} className="w-full px-4 py-2.5 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm focus:border-blue-600 transition-all" />
+                        </div>
+                        <div className="space-y-1.5 text-white">
+                          <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Genre</label>
+                          <input type="text" placeholder="Action, Rhythm.." value={formData.genre} onChange={(e) => setFormData({...formData, genre: e.target.value})} className="w-full px-4 py-2.5 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm focus:border-blue-600 transition-all" />
+                        </div>
+                      </div>
+
+                      {/* DESKRIPSI GAME */}
+                      <div className="space-y-1.5 text-white">
+                        <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Deskripsi Singkat</label>
+                        <textarea placeholder="Penjelasan singkat mengenai game ini.." value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} className="w-full px-4 py-3 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm text-gray-300 resize-none h-20 shadow-inner focus:border-blue-600 transition-all" />
+                      </div>
+
                       {/* MOD PRESETS */}
                       <div className="space-y-2">
                         <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Mod Presets (Quick Select):</label>
@@ -249,21 +267,27 @@ export default function AdminGamePanel({ isOpen, onClose }) {
                             )}
                           </AnimatePresence>
                         </div>
-
+                        
                         <div className="space-y-1.5 text-white">
-                          <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Genre</label>
-                          <input type="text" placeholder="Action, Rhythm.." value={formData.genre} onChange={(e) => setFormData({...formData, genre: e.target.value})} className="w-full px-4 py-2.5 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm" />
+                          <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Banner Image URL</label>
+                          <input type="text" placeholder="https://image-link.com/..." value={formData.imageUrl} onChange={(e) => setFormData({...formData, imageUrl: e.target.value})} className="w-full px-4 py-2.5 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm text-blue-400 focus:border-blue-600 transition-all" required />
                         </div>
                       </div>
                       
-                      <div className="space-y-4">
-                        <input type="text" placeholder="Image URL (Banner)" value={formData.imageUrl} onChange={(e) => setFormData({...formData, imageUrl: e.target.value})} className="w-full px-4 py-2.5 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm text-blue-400" required />
-                        <input type="text" placeholder="Download Link (APK/MOD)" value={formData.playstoreLink} onChange={(e) => setFormData({...formData, playstoreLink: e.target.value})} className="w-full px-4 py-2.5 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm text-green-400" required />
+                      <div className="space-y-1.5 text-white">
+                        <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Download Link (APK/MOD)</label>
+                        <input type="text" placeholder="https://download-link.com/..." value={formData.playstoreLink} onChange={(e) => setFormData({...formData, playstoreLink: e.target.value})} className="w-full px-4 py-2.5 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm text-green-400 focus:border-blue-600 transition-all" required />
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <textarea placeholder="Fitur Game (Pisah dengan koma)" value={formData.features} onChange={(e) => setFormData({...formData, features: e.target.value})} className="w-full px-4 py-3 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm text-gray-300 resize-none h-24 shadow-inner" />
-                        <textarea placeholder="Fitur MOD (Pisah dengan koma)" value={formData.modFeatures} onChange={(e) => setFormData({...formData, modFeatures: e.target.value})} className="w-full px-4 py-3 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm text-purple-300 resize-none h-24 shadow-inner" />
+                        <div className="space-y-1.5 text-white">
+                          <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Fitur Game (Pisah dengan koma)</label>
+                          <textarea placeholder="60FPS, High Quality, etc.." value={formData.features} onChange={(e) => setFormData({...formData, features: e.target.value})} className="w-full px-4 py-3 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm text-gray-300 resize-none h-24 shadow-inner focus:border-blue-600 transition-all" />
+                        </div>
+                        <div className="space-y-1.5 text-white">
+                          <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">Fitur MOD (Pisah dengan koma)</label>
+                          <textarea placeholder="Auto Perfect, Unlock All, etc.." value={formData.modFeatures} onChange={(e) => setFormData({...formData, modFeatures: e.target.value})} className="w-full px-4 py-3 bg-[#0f111a] border border-gray-800 rounded-xl outline-none text-sm text-purple-300 resize-none h-24 shadow-inner focus:border-blue-600 transition-all" />
+                        </div>
                       </div>
 
                       <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-blue-900/20 uppercase tracking-widest text-xs">
