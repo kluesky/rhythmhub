@@ -10,7 +10,7 @@ export default function AdminDaily() {
   const [showConfirm, setShowConfirm] = useState(false) // State Pop-up Hapus
   const [formData, setFormData] = useState({ name: '', origin: '', imageUrl: '', rarity: 'SSR', description: '' })
 
-  const ADMIN_PASSWORD = 'adminrhythm123' 
+  const ADMIN_PASSWORD = 'lyora6396' 
   const PASTE_ID = '68O7d7kH' 
   const API_KEY = 'aJLzptOLgwIhDwVRkOTSEXsqnYWKg42aoh3FhxrZ1CgvFooGtKUNkwKVPvzD'
 
