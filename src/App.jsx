@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -9,7 +8,8 @@ import GameGrid from './components/GameGrid'
 import Pagination from './components/Pagination'
 import SearchSortBar from './components/SearchSortBar'
 import ActivityLog from './components/ActivityLog' 
-import MusicPlayer from './components/MusicPlayer' // Fitur Musik Playlist Baru
+import MusicPlayer from './components/MusicPlayer'
+import DailyCard from './components/DailyCard'
 
 // Pages
 import About from './pages/About'
@@ -17,6 +17,8 @@ import Request from './pages/Request'
 import Auth from './pages/Auth'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
+import AdminDaily from './pages/AdminDaily'
+import Showcase from './pages/Showcase' // Import Page Showcase Baru
 
 import { getAllGamesFromPastefy } from './api/pastefy'
 
@@ -32,7 +34,6 @@ function App() {
   
   const itemsPerPage = 6
 
-  // 1. Session & Data Loading
   useEffect(() => {
     const savedSession = localStorage.getItem('hub_session')
     if (savedSession) setSession(JSON.parse(savedSession))
@@ -46,7 +47,6 @@ function App() {
     loadGames()
   }, [])
 
-  // 2. Navigation Handler
   useEffect(() => {
     const handlePopState = () => setCurrentPageState(window.location.pathname)
     setCurrentPageState(window.location.pathname)
@@ -60,7 +60,6 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // 3. Logic: Filtering & Sorting
   const processedGames = useMemo(() => {
     let result = [...games]
     if (filter === 'jp') result = result.filter(g => g.version === 'JP')
@@ -82,7 +81,6 @@ function App() {
     return result
   }, [games, filter, searchQuery, sortBy])
 
-  // 4. Pagination Logic
   const totalPages = Math.ceil(processedGames.length / itemsPerPage)
   const paginatedGames = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage
@@ -91,60 +89,74 @@ function App() {
 
   useEffect(() => { setCurrentPage(1) }, [filter, searchQuery, sortBy])
 
-  // Auth Guard
   if (!session) {
     return <Auth onLoginSuccess={(user) => setSession(user)} />
   }
 
-  // 5. Page Content Switcher
   const renderContent = () => {
     switch (currentPageState) {
       case '/about': return <About key="about" />
       case '/request': return <Request key="request" />
       case '/privacy': return <Privacy key="privacy" />
       case '/terms': return <Terms key="terms" />
+      case '/admin-daily': return <AdminDaily key="admin-daily" />
+      case '/showcase': return <Showcase key="showcase" /> // Render Page Showcase
       default: return (
         <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          {/* Hero Section */}
           <div className="text-center mb-16 space-y-6">
             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 shadow-lg">
               <span className="w-2 h-2 bg-blue-50 rounded-full animate-pulse shadow-[0_0_8px_white]"></span>
               <span className="text-[10px] text-blue-400 font-black uppercase tracking-[0.2em]">Database Online Active</span>
             </motion.div>
             <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white">RHYTHM<span className="text-blue-600">HUB</span></h1>
-            <p className="text-gray-500 max-w-2xl mx-auto font-medium leading-relaxed">Pusat koleksi MOD APK game rhythm terbaik. <br className="hidden md:block" /><span className="text-blue-400/80 italic font-bold">Download gratis, install mudah, main tanpa batas.</span></p>
-            
-            <div className="flex flex-wrap justify-center gap-4 md:gap-12 mt-10">
-              {[{ label: 'Total Games', val: games.length }, { label: 'Cloud Features', val: '12+' }, { label: 'Security Status', val: 'Verified' }].map((s, i) => (
-                <div key={i} className="bg-[#161b2c] px-6 py-3 rounded-2xl border border-white/5 min-w-[120px] shadow-xl">
-                  <div className="text-xl font-black text-white">{s.val}</div>
-                  <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{s.label}</div>
+            <p className="text-gray-500 max-w-2xl mx-auto font-medium leading-relaxed uppercase tracking-wide text-xs">Pusat koleksi MOD APK game rhythm terbaik. <br className="hidden md:block" /><span className="text-blue-400 font-bold italic">Download gratis, install mudah, main tanpa batas.</span></p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div className="lg:col-span-8 xl:col-span-9 space-y-8 relative z-[50]">
+              <SearchSortBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} sortBy={sortBy} setSortBy={setSortBy} />
+              <FilterBar filter={filter} setFilter={setFilter} />
+              
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-24 space-y-4">
+                  <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-xs font-black text-gray-600 tracking-[0.3em] uppercase">Synchronizing...</p>
                 </div>
-              ))}
+              ) : (
+                <div className="space-y-12">
+                  <GameGrid games={paginatedGames} />
+                  {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />}
+                </div>
+              )}
+              <div className="bg-[#451010]/20 border border-[#7f1d1d]/50 rounded-2xl p-4 mt-12 shadow-2xl">
+                <p className="text-[9px] text-[#f87171] text-center font-bold uppercase tracking-widest leading-relaxed">⚠️ Peringatan: MOD APK untuk edukasi. Project Sekai berisiko tinggi banned. Gunakan akun tumbal!</p>
+              </div>
             </div>
-          </div>
 
-          {/* Global Warning Label */}
-          <div className="bg-[#451010]/20 border border-[#7f1d1d]/50 rounded-2xl p-4 mb-12 max-w-3xl mx-auto shadow-2xl">
-            <p className="text-[10px] text-[#f87171] text-center font-bold uppercase tracking-widest leading-relaxed">⚠️ Peringatan: MOD APK untuk edukasi. Project Sekai berisiko tinggi banned. Gunakan akun tumbal!</p>
-          </div>
-
-          {/* Main Controls */}
-          <div className="space-y-8 relative z-[50]">
-            <SearchSortBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} sortBy={sortBy} setSortBy={setSortBy} />
-            <FilterBar filter={filter} setFilter={setFilter} />
-            
-            {loading ? (
-              <div className="flex flex-col items-center justify-center py-24 space-y-4">
-                <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-xs font-black text-gray-600 tracking-[0.3em] uppercase">Synchronizing...</p>
+            <aside className="lg:col-span-4 xl:col-span-3 space-y-8 relative z-[40]">
+              <div className="sticky top-28 space-y-8">
+                <div className="flex flex-col items-center gap-4 text-center">
+                  <h4 className="text-[9px] font-black text-blue-500/40 uppercase tracking-[0.4em] italic">— Featured Terminal</h4>
+                  <DailyCard />
+                </div>
+                <div className="bg-[#161b2c]/40 border border-white/5 rounded-3xl p-6 backdrop-blur-xl">
+                   <div className="flex justify-between items-center mb-4">
+                      <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Network Status</span>
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                   </div>
+                   <div className="space-y-3">
+                      <div className="flex justify-between text-[10px] font-bold">
+                        <span className="text-gray-500 uppercase">Total Games</span>
+                        <span className="text-white">{games.length}</span>
+                      </div>
+                      <div className="flex justify-between text-[10px] font-bold">
+                        <span className="text-gray-500 uppercase">Encryption</span>
+                        <span className="text-blue-400 tracking-tighter">AES-256</span>
+                      </div>
+                   </div>
+                </div>
               </div>
-            ) : (
-              <div className="space-y-12">
-                <GameGrid games={paginatedGames} />
-                {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />}
-              </div>
-            )}
+            </aside>
           </div>
         </motion.div>
       )
@@ -153,37 +165,29 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#0f111a] text-white selection:bg-blue-500/30">
-      <Navbar 
-        navigateTo={navigateTo} 
-        activePage={currentPageState} 
-        user={session}
-        onLogout={() => { localStorage.removeItem('hub_session'); setSession(null); }}
-      />
-      
+      <Navbar navigateTo={navigateTo} activePage={currentPageState} user={session} onLogout={() => { localStorage.removeItem('hub_session'); setSession(null); }} />
       <main className="container mx-auto px-4 py-12 max-w-7xl relative z-10">
-        <AnimatePresence mode="wait">
-          {renderContent()}
-        </AnimatePresence>
+        <AnimatePresence mode="wait">{renderContent()}</AnimatePresence>
       </main>
 
-      {/* --- PREMIUM FOOTER --- */}
       <footer className="bg-[#0b0d14] border-t border-gray-800/50 mt-32 pt-20 pb-10 font-sans relative z-10">
         <div className="container mx-auto px-4 max-w-7xl space-y-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="space-y-5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-xl"></div>
-                <span className="font-black text-xl tracking-tighter uppercase">RHYTHM<span className="text-blue-500">HUB</span></span>
+                <div className="w-10 h-10 rounded-xl overflow-hidden border border-gray-800 shadow-xl">
+                  <img src="https://files.catbox.moe/ce6atq.jpg" alt="Logo" className="w-full h-full object-cover" />
+                </div>
+                <span className="font-black text-xl tracking-tighter uppercase text-white">RHYTHM<span className="text-blue-500">HUB</span></span>
               </div>
               <p className="text-xs text-gray-500 leading-relaxed uppercase tracking-wider">Platform kurasi MOD APK khusus game rhythm dengan standar kualitas komunitas.</p>
             </div>
-            
             {[
-              { title: 'Navigation', links: [{ n: 'Home', p: '/' }, { n: 'About', p: '/about' }, { n: 'Request', p: '/request' }] },
+              { title: 'Navigation', links: [{ n: 'Home', p: '/' }, { n: 'About', p: '/about' }, { n: 'Request', p: '/request' }, { n: 'Showcase', p: '/showcase' }, { n: 'Admin', p: '/admin-daily' }] },
               { title: 'Categories', links: [{ n: 'JP Version', f: 'jp' }, { n: 'Global Version', f: 'global' }, { n: 'See All', f: 'all' }] },
-              { title: 'Community', links: [{ n: 'Telegram' }, { n: 'WhatsApp' }, { n: 'Discord' }] }
+              { title: 'Community', links: [{ n: 'Video Showcase', p: '/showcase' }, { n: 'Telegram' }, { n: 'WhatsApp' }] }
             ].map((col, i) => (
-              <div key={i} className="space-y-5">
+              <div key={i} className="space-y-5 text-left">
                 <h4 className="text-[11px] font-black text-white uppercase tracking-widest">{col.title}</h4>
                 <ul className="space-y-3">
                   {col.links.map((l, j) => (
@@ -195,7 +199,6 @@ function App() {
               </div>
             ))}
           </div>
-          
           <div className="pt-10 border-t border-gray-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
             <p>© 2026 RhythmHub — Secure Cloud Database Sync</p>
             <div className="flex gap-6">
@@ -205,10 +208,8 @@ function App() {
           </div>
         </div>
       </footer>
-
-      {/* --- FLOATING COMPONENTS --- */}
       <ActivityLog />
-      <MusicPlayer /> {/* Player Musik Playlist Kamu Sudah Aktif! */}
+      <MusicPlayer />
     </div>
   )
 }
