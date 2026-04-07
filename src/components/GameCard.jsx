@@ -1,268 +1,110 @@
-// src/components/GameCard.jsx
-import { motion } from 'framer-motion'
-import { useState } from 'react'
-import { useToast } from '../context/ToastContext'
+import { motion, AnimatePresence } from 'framer-motion'
 
-export default function GameCard({ game }) {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [showShareMenu, setShowShareMenu] = useState(false)
-  const { addToast } = useToast()
+export default function GameCard({ game, onDownload }) {
+  const isPjsk = game.name?.toLowerCase().includes("project sekai");
 
-  // Cek apakah game baru (7 hari terakhir)
-  const isNewGame = () => {
-    if (!game.createdAt) return false
-    const createdDate = new Date(game.createdAt)
-    const now = new Date()
-    const diffDays = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24))
-    return diffDays <= 7
-  }
-
-  // Fungsi untuk mendapatkan badge status - Warna diperbarui sesuai SS
-  const getStatusBadge = () => {
-    const status = game.status || 'success'
-    const statusText = game.statusText || '🟢 Online / Stable'
-    
-    if (status === 'success') {
-      return {
-        color: 'bg-[#14321a]/60 text-[#4ade80] border-[#1e5128]',
-        icon: '🟢',
-        text: statusText
-      }
-    }
-    if (status === 'warning') {
-      return {
-        color: 'bg-[#3b2d0a]/60 text-[#fbbf24] border-[#785413]',
-        icon: '⚠️',
-        text: statusText
-      }
-    }
-    if (status === 'danger') {
-      return {
-        color: 'bg-[#451010]/60 text-[#f87171] border-[#7f1d1d]',
-        icon: '🔴',
-        text: statusText
-      }
-    }
-    return {
-      color: 'bg-gray-800/60 text-gray-400 border-gray-700',
-      icon: '⚪',
-      text: statusText
-    }
-  }
-
-  // Fungsi Share
-  const shareToWhatsApp = () => {
-    const text = `🎮 *${game.name}* (${game.version})\n\n${game.description}\n\n🔗 Download: ${window.location.origin}/game/${game.id}\n\n#RhythmHub #MODGame`
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
-    addToast(`💚 Berhasil membuka WhatsApp untuk share ${game.name}`, 'success')
-    setShowShareMenu(false)
-  }
-
-  const shareToTelegram = () => {
-    const text = `🎮 ${game.name} (${game.version})\n\n${game.description}\n\n🔗 Download: ${window.location.origin}/game/${game.id}`
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.origin + '/game/' + game.id)}&text=${encodeURIComponent(`🎮 ${game.name} (${game.version})\n\n${game.description}`)}`, '_blank')
-    addToast(`✈️ Berhasil membuka Telegram untuk share ${game.name}`, 'success')
-    setShowShareMenu(false)
-  }
-
-  const shareToTwitter = () => {
-    const text = `🎮 ${game.name} (${game.version}) - MOD APK Rhythm Game! Download sekarang juga! 🎵🔥`
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.origin + '/game/' + game.id)}`, '_blank')
-    addToast(`🐦 Berhasil membuka Twitter untuk share ${game.name}`, 'success')
-    setShowShareMenu(false)
-  }
-
-  const copyLink = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/game/${game.id}`)
-    addToast('🔗 Link berhasil disalin!', 'success')
-    setShowShareMenu(false)
-  }
-
-  const statusBadge = getStatusBadge()
-  const showNewBadge = isNewGame()
+  const modFeatures = Array.isArray(game.modFeatures) 
+    ? game.modFeatures 
+    : game.modFeatures?.split(',').map(f => f.trim()) || [];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.3 }}
-      className="group bg-[#1a1c26] rounded-xl overflow-hidden border border-gray-800 hover:border-blue-500/50 hover:shadow-2xl transition-all duration-300 relative shadow-lg"
+    <motion.div 
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-[#161b2c]/60 border border-white/5 rounded-[2.5rem] p-6 flex flex-col justify-between group hover:border-blue-500/30 transition-all duration-500 relative overflow-hidden shadow-2xl backdrop-blur-sm"
     >
-      {/* Badge NEW */}
-      {showNewBadge && (
-        <div className="absolute top-3 left-3 z-20">
-          <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-md shadow-lg animate-pulse">
-            🔥 NEW
+      {/* POPULAR BADGE */}
+      <AnimatePresence>
+        {isPjsk && (
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
+            className="absolute top-6 right-6 z-10 flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 px-3 py-1.5 rounded-full backdrop-blur-md"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            </span>
+            <span className="text-[8px] font-black text-blue-300 uppercase tracking-[0.2em] leading-none">Top Downloaded</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="space-y-6">
+        {/* THUMBNAIL AREA */}
+        <div className="aspect-video rounded-[1.8rem] overflow-hidden border border-white/5 relative bg-[#0f111a]">
+          <img 
+            src={game.imageUrl || 'https://via.placeholder.com/400x225'} 
+            alt={game.name} 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0f111a] via-transparent to-transparent opacity-80"></div>
+          
+          {/* VERSION TAG OVERLAY */}
+          <div className="absolute bottom-4 left-4">
+            <span className={`text-[8px] font-black px-3 py-1 rounded-lg border uppercase tracking-widest ${
+                game.version === 'JP' 
+                  ? 'bg-red-500 text-white border-red-400' 
+                  : 'bg-blue-600 text-white border-blue-400'
+              }`}>
+                {game.version}
+            </span>
           </div>
         </div>
-      )}
 
-      {/* Tombol Share (3 dots) */}
-      <div className="absolute top-3 right-3 z-20">
-        <div className="relative">
-          <button
-            onClick={() => setShowShareMenu(!showShareMenu)}
-            className="bg-black/60 backdrop-blur-md hover:bg-black/80 text-white p-1.5 rounded-full transition-all duration-200 border border-white/10"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-          </button>
-
-          {/* Share Menu */}
-          {showShareMenu && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="absolute right-0 mt-2 w-40 bg-[#0f111a] border border-gray-700 rounded-lg shadow-2xl z-50 overflow-hidden"
-            >
-              <div className="py-1">
-                <button onClick={shareToWhatsApp} className="w-full text-left px-4 py-2 text-xs text-gray-300 hover:bg-gray-800 hover:text-white transition flex items-center gap-2">
-                  <span>💚</span> WhatsApp
-                </button>
-                <button onClick={shareToTelegram} className="w-full text-left px-4 py-2 text-xs text-gray-300 hover:bg-gray-800 hover:text-white transition flex items-center gap-2">
-                  <span>✈️</span> Telegram
-                </button>
-                <button onClick={shareToTwitter} className="w-full text-left px-4 py-2 text-xs text-gray-300 hover:bg-gray-800 hover:text-white transition flex items-center gap-2">
-                  <span>🐦</span> Twitter
-                </button>
-                <hr className="border-gray-800 my-1" />
-                <button onClick={copyLink} className="w-full text-left px-4 py-2 text-xs text-gray-300 hover:bg-gray-800 hover:text-white transition flex items-center gap-2">
-                  <span>🔗</span> Copy Link
-                </button>
+        {/* CONTENT INFO */}
+        <div className="text-left space-y-5">
+          {/* TITLE & METADATA SECTION */}
+          <div className="space-y-3">
+            <h3 className="text-xl font-black text-white uppercase italic tracking-tighter leading-none group-hover:text-blue-400 transition-colors">
+              {game.name}
+            </h3>
+            
+            {/* SEPARATED METADATA GRID */}
+            <div className="flex gap-4 border-y border-white/5 py-3">
+              <div className="flex flex-col gap-1 flex-1">
+                <span className="text-[7px] font-black text-gray-600 uppercase tracking-[0.3em]">Publisher</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase truncate">{game.publisher || 'Unknown'}</span>
               </div>
-            </motion.div>
-          )}
+              <div className="w-[1px] bg-white/5 h-6 self-center"></div>
+              <div className="flex flex-col gap-1 flex-1">
+                <span className="text-[7px] font-black text-blue-500/50 uppercase tracking-[0.3em]">Genre Tag</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase truncate">{game.genre || 'General'}</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* MODIFIED CORE BOX */}
+          <div className="bg-black/40 rounded-2xl p-4 border border-white/5 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[8px] font-black text-blue-400 uppercase tracking-[0.2em] italic">Modified Core</span>
+              <div className="h-[1px] flex-1 bg-blue-500/10 ml-3"></div>
+            </div>
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+              {modFeatures.length > 0 ? modFeatures.map((feat, idx) => (
+                <div key={idx} className="flex items-center gap-1.5">
+                  <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
+                  <span className="text-[10px] text-gray-300 font-bold uppercase tracking-tight">{feat}</span>
+                </div>
+              )) : (
+                <span className="text-[10px] text-gray-600 font-bold uppercase italic">Standard Protocol</span>
+              )}
+            </div>
+          </div>
+
+          <p className="text-[11px] text-gray-500 leading-relaxed font-medium uppercase line-clamp-2 italic">
+            {game.description}
+          </p>
         </div>
       </div>
 
-      {/* Gambar Cover */}
-      <div className="relative h-44 overflow-hidden bg-gray-800">
-        <img 
-          src={game.imageUrl} 
-          alt={game.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-          onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/300x200/0f111a/ffffff?text=No+Image'
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1c26] via-transparent to-transparent opacity-80"></div>
-        
-        {/* Badge versi */}
-        <span className={`absolute bottom-3 left-3 px-2 py-0.5 rounded text-[10px] font-bold z-10 shadow-lg border border-white/10 ${
-          game.version === 'JP' 
-            ? 'bg-red-600 text-white' 
-            : 'bg-blue-600 text-white'
-        }`}>
-          {game.version === 'JP' ? '🇯🇵 JP' : '🌍 GLOBAL'}
-        </span>
-
-        {/* Badge genre */}
-        <span className="absolute bottom-3 right-3 px-2 py-0.5 rounded text-[10px] font-bold bg-black/60 backdrop-blur-md text-white border border-white/10">
-          {game.genre || 'RHYTHM GAME'}
-        </span>
-      </div>
-
-      {/* Konten */}
-      <div className="p-5">
-        {/* Header: Nama Game & Publisher */}
-        <div className="mb-3">
-          <h3 className="text-xl font-bold text-white mb-0.5 line-clamp-1 group-hover:text-blue-400 transition-colors tracking-tight">{game.name}</h3>
-          <p className="text-xs text-gray-400 font-medium">{game.publisher || 'Unknown Publisher'}</p>
-        </div>
-
-        {/* Status MOD Badge */}
-        <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-bold border uppercase tracking-wider ${statusBadge.color} mb-4`}>
-          <span>{statusBadge.icon}</span>
-          <span>{statusBadge.text}</span>
-        </div>
-
-        {/* Deskripsi Singkat */}
-        <p className="text-sm text-gray-300 mb-4 leading-relaxed line-clamp-2">
-          {game.description || 'No description available.'}
-        </p>
-
-        {/* Tombol toggle fitur */}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="text-[11px] font-bold text-blue-400 hover:text-blue-300 mb-4 flex items-center gap-1.5 transition-all uppercase tracking-wide"
-        >
-          <span className={`transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
-            ▼
-          </span>
-          <span>{isExpanded ? 'Sembunyikan fitur' : 'Lihat fitur MOD & Game'}</span>
-        </button>
-
-        {/* Fitur-fitur (expandable) */}
-        <motion.div
-          initial={false}
-          animate={{ height: isExpanded ? 'auto' : 0, opacity: isExpanded ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-          className="overflow-hidden"
-        >
-          {/* MOD Features */}
-          {game.modFeatures && game.modFeatures.length > 0 && (
-            <div className="mb-4 bg-[#241b35] rounded-xl p-3 border border-purple-900/50">
-              <p className="text-[10px] font-black text-purple-400 mb-2 flex items-center gap-1 tracking-tighter">
-                <span>⚡</span> MOD FEATURES:
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {game.modFeatures.map((mod, idx) => (
-                  <span key={idx} className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-900/40 text-purple-200 border border-purple-800/50">
-                    {mod}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Game Features */}
-          {game.features && game.features.length > 0 && (
-            <div className="mb-4 bg-[#1e2230] rounded-xl p-3 border border-gray-800">
-              <p className="text-[10px] font-black text-gray-400 mb-2 flex items-center gap-1 tracking-tighter">
-                <span>✨</span> GAME FEATURES:
-              </p>
-              <div className="space-y-1.5">
-                {game.features.map((feature, idx) => (
-                  <div key={idx} className="text-[11px] text-gray-300 flex items-start gap-2">
-                    <span className="text-blue-500">•</span>
-                    <span className="leading-tight">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Disclaimer untuk game High Risk */}
-          {game.status === 'warning' && (
-            <div className="mb-4 bg-[#3b2d0a]/30 border border-yellow-900/50 rounded-xl p-3">
-              <p className="text-[10px] text-yellow-500 leading-normal">
-                <span className="font-black mr-1">⚠️ DISCLAIMER:</span> 
-                MOD ini memiliki risiko deteksi dan banned. Gunakan akun tumbal!
-              </p>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Tombol Download */}
-        <motion.a
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          href={game.playstoreLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`block w-full text-center font-black py-3 rounded-xl transition-all duration-300 text-xs uppercase tracking-[0.1em] shadow-lg ${
-            game.status === 'danger'
-              ? 'bg-gray-800 text-gray-500 cursor-not-allowed pointer-events-none border border-gray-700'
-              : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20'
-          }`}
-        >
-          {game.status === 'danger' ? '⏳ MOD MAINTENANCE' : '🔥 DOWNLOAD MOD APK'}
-        </motion.a>
-      </div>
+      {/* ACTION BUTTON */}
+      <button 
+        onClick={() => onDownload(game.playstoreLink)}
+        className="w-full mt-8 bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-[0.3em] shadow-xl shadow-blue-900/20 active:scale-95 transition-all group/btn"
+      >
+        <span className="relative z-10">Download Mod APK</span>
+      </button>
     </motion.div>
   )
 }
