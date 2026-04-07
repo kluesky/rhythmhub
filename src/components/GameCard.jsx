@@ -46,40 +46,32 @@ export default function GameCard({ game, onDownload }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0f111a] via-transparent to-transparent opacity-80"></div>
           
-          {/* VERSION TAG OVERLAY */}
           <div className="absolute bottom-4 left-4 flex gap-2">
             <span className={`text-[8px] font-black px-3 py-1 rounded-lg border uppercase tracking-widest ${
-                game.version === 'JP' 
-                  ? 'bg-red-500 text-white border-red-400' 
-                  : 'bg-blue-600 text-white border-blue-400'
+                game.version === 'JP' ? 'bg-red-500 text-white border-red-400' : 'bg-blue-600 text-white border-blue-400'
               }`}>
                 {game.version}
             </span>
-            
-            {/* STATUS BADGE ON IMAGE */}
             {isMaintenance && (
-              <span className="text-[8px] font-black px-3 py-1 rounded-lg bg-black text-red-500 border border-red-500/50 uppercase tracking-widest">
-                Offline
-              </span>
+              <span className="text-[8px] font-black px-3 py-1 rounded-lg bg-black text-red-500 border border-red-500/50 uppercase tracking-widest">Offline</span>
             )}
           </div>
         </div>
 
         {/* CONTENT INFO */}
         <div className="text-left space-y-5">
-          <div className="space-y-3">
+          <div className="space-y-3 text-left">
             <h3 className="text-xl font-black text-white uppercase italic tracking-tighter leading-none group-hover:text-blue-400 transition-colors">
               {game.name}
             </h3>
             
-            {/* SEPARATED METADATA GRID */}
             <div className="flex gap-4 border-y border-white/5 py-3">
-              <div className="flex flex-col gap-1 flex-1">
+              <div className="flex flex-col gap-1 flex-1 text-left">
                 <span className="text-[7px] font-black text-gray-600 uppercase tracking-[0.3em]">Publisher</span>
                 <span className="text-[10px] font-bold text-gray-400 uppercase truncate">{game.publisher || 'Unknown'}</span>
               </div>
               <div className="w-[1px] bg-white/5 h-6 self-center"></div>
-              <div className="flex flex-col gap-1 flex-1">
+              <div className="flex flex-col gap-1 flex-1 text-left">
                 <span className="text-[7px] font-black text-blue-500/50 uppercase tracking-[0.3em]">Status</span>
                 <span className={`text-[10px] font-bold uppercase truncate ${
                   isMaintenance ? 'text-red-500' : isHighRisk ? 'text-yellow-500' : 'text-green-500'
@@ -90,31 +82,29 @@ export default function GameCard({ game, onDownload }) {
             </div>
           </div>
           
-          {/* MODIFIED CORE BOX */}
-          <div className="bg-black/40 rounded-2xl p-4 border border-white/5 space-y-3">
+          <div className="bg-black/40 rounded-2xl p-4 border border-white/5 space-y-3 text-left">
             <div className="flex items-center justify-between">
               <span className="text-[8px] font-black text-blue-400 uppercase tracking-[0.2em] italic">Modified Core</span>
               <div className="h-[1px] flex-1 bg-blue-500/10 ml-3"></div>
             </div>
-            <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-left">
               {modFeatures.length > 0 ? modFeatures.map((feat, idx) => (
                 <div key={idx} className="flex items-center gap-1.5">
                   <div className={`w-1 h-1 rounded-full ${isMaintenance ? 'bg-gray-600' : 'bg-blue-600'}`}></div>
                   <span className="text-[10px] text-gray-300 font-bold uppercase tracking-tight">{feat}</span>
                 </div>
               )) : (
-                <span className="text-[10px] text-gray-600 font-bold uppercase italic">Standard Protocol</span>
+                <span className="text-[10px] text-gray-600 font-bold uppercase italic text-left">Standard Protocol</span>
               )}
             </div>
           </div>
 
-          <p className="text-[11px] text-gray-500 leading-relaxed font-medium uppercase line-clamp-2 italic">
+          <p className="text-[11px] text-gray-500 leading-relaxed font-medium uppercase line-clamp-2 italic text-left">
             {game.description}
           </p>
         </div>
       </div>
 
-      {/* ACTION BUTTON - DISABLED ON MAINTENANCE */}
       <button 
         disabled={isMaintenance}
         onClick={() => onDownload(game.playstoreLink)}
@@ -124,9 +114,7 @@ export default function GameCard({ game, onDownload }) {
           : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20 active:scale-95'
         }`}
       >
-        <span className="relative z-10">
-          {isMaintenance ? 'Under Maintenance' : 'Download Mod APK'}
-        </span>
+        <span className="relative z-10">{isMaintenance ? 'Under Maintenance' : 'Download Mod APK'}</span>
       </button>
     </motion.div>
   )
