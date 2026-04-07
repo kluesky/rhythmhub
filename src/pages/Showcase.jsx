@@ -1,4 +1,4 @@
-// src/pages/Showcase.jsx - MOBILE OPTIMIZED FIX
+// src/pages/Showcase.jsx - FINAL POSITIONAL FIX
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getAllShowcases, addShowcaseToPastefy } from '../api/showcase'
@@ -16,6 +16,17 @@ export default function Showcase() {
     if (res.success) setVideos(res.videos)
   }
 
+  // Lock Body Scroll ketika modal terbuka
+  useEffect(() => {
+    if (showForm) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    // Cleanup function
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [showForm]);
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -31,9 +42,9 @@ export default function Showcase() {
   }
 
   return (
-    <div className="space-y-12 pb-24">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-white/5 pb-8">
+    <div className="space-y-12 pb-24 min-h-screen">
+      {/* HEADER SECTION */}
+      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-white/5 pb-10">
         <div className="text-left">
           <h2 className="text-4xl font-black text-white uppercase italic tracking-tighter leading-none">
             Community <span className="text-blue-500">Showcase</span>
@@ -42,15 +53,18 @@ export default function Showcase() {
             Exhibit your rhythm mod gameplay skills
           </p>
         </div>
-        <button onClick={() => setShowForm(true)} className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white font-black px-10 py-5 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
+        <button 
+          onClick={() => setShowForm(true)} 
+          className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white font-black px-10 py-5 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all leading-none"
+        >
           + Post Showcase
         </button>
       </div>
 
-      {/* Video Grid */}
+      {/* VIDEO GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
-        {videos.map((vid) => (
-          <motion.div key={vid.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-[#161b2c]/40 border border-white/5 rounded-[2.5rem] overflow-hidden group shadow-2xl">
+        {videos.length > 0 ? videos.map((vid) => (
+          <motion.div key={vid.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-[#161b2c]/40 border border-white/5 rounded-[2.5rem] overflow-hidden group shadow-2xl hover:border-blue-500/20 transition-all">
             <div className="aspect-video bg-black flex items-center justify-center relative">
               <video src={vid.videoUrl} controls className="w-full h-full object-contain" poster="https://files.catbox.moe/ce6atq.jpg" />
             </div>
@@ -59,34 +73,41 @@ export default function Showcase() {
               <p className="text-[9px] text-blue-500 font-bold uppercase tracking-widest mt-2 leading-none">By {vid.username}</p>
             </div>
           </motion.div>
-        ))}
+        )) : (
+            <div className="col-span-full text-center py-20 bg-white/5 rounded-3xl border border-white/5">
+                <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em]">No gameplay posted yet</span>
+            </div>
+        )}
       </div>
 
-      {/* MODAL FULL SCREEN UNTUK MOBILE */}
+      {/* MODAL FULL SCREEN OPTIMIZED */}
       <AnimatePresence>
         {showForm && (
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-[#05060a] overflow-y-auto"
+            className="fixed inset-0 z-[9999] bg-[#05060a]/95 backdrop-blur-sm overflow-y-auto"
           >
+            {/* Menggunakan flex center agar posisi modal pas di tengah layar */}
             <div className="min-h-screen flex items-center justify-center p-4 md:p-8">
+              
               {/* Box Modal */}
               <motion.div 
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="bg-[#0b0d14] border border-white/10 rounded-[2.5rem] w-full max-w-md shadow-2xl p-8 relative"
+                initial={{ y: 30, opacity: 0, scale: 0.95 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: 30, opacity: 0, scale: 0.95 }}
+                className="bg-[#0b0d14] border border-white/10 rounded-[2.5rem] w-full max-w-md shadow-[0_30px_100px_rgba(0,0,0,0.8)] p-8 relative"
               >
-                {/* Close Button Floating */}
+                {/* Close Button Floating di Pojok */}
                 <button 
                   onClick={() => setShowForm(false)} 
-                  className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-full transition-all text-gray-400 hover:text-white"
+                  className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-full transition-all text-gray-400 hover:text-white group"
                 >
-                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                   <svg className="w-6 h-6 transform group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
 
-                <div className="text-left mb-8">
+                <div className="text-left mb-10 mt-2">
                   <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter leading-none">New Entry</h3>
                   <p className="text-[9px] font-bold text-gray-600 uppercase tracking-widest mt-2">Terminal System Entry</p>
                 </div>
@@ -102,29 +123,32 @@ export default function Showcase() {
                     </a>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-5 text-left pb-10">
+                  <form onSubmit={handleSubmit} className="space-y-6 text-left pb-4">
+                    {/* Username Input */}
                     <div className="space-y-2">
                       <label className="text-[10px] font-black text-blue-500 uppercase ml-2 italic tracking-widest leading-none">Uploader Username</label>
-                      <input type="text" placeholder="Your name" className="w-full bg-black/40 border border-white/5 p-5 rounded-2xl text-white text-xs outline-none focus:border-blue-500 transition-all" onChange={(e) => setForm({...form, username: e.target.value})} required />
+                      <input type="text" placeholder="Your name" className="w-full bg-black/40 border border-white/5 p-5 rounded-2xl text-white text-xs outline-none focus:border-blue-500 transition-all font-mono" onChange={(e) => setForm({...form, username: e.target.value})} required />
                     </div>
                     
+                    {/* Game Title Input */}
                     <div className="space-y-2">
                       <label className="text-[10px] font-black text-blue-500 uppercase ml-2 italic tracking-widest leading-none">Game Title</label>
-                      <input type="text" placeholder="e.g. Project SEKAI" className="w-full bg-black/40 border border-white/5 p-5 rounded-2xl text-white text-xs outline-none focus:border-blue-500 transition-all" onChange={(e) => setForm({...form, gameName: e.target.value})} required />
+                      <input type="text" placeholder="e.g. Project SEKAI" className="w-full bg-black/40 border border-white/5 p-5 rounded-2xl text-white text-xs outline-none focus:border-blue-500 transition-all font-mono" onChange={(e) => setForm({...form, gameName: e.target.value})} required />
                     </div>
 
+                    {/* Catbox URL Input */}
                     <div className="space-y-2">
                       <label className="text-[10px] font-black text-blue-500 uppercase ml-2 italic tracking-widest leading-none">Catbox URL (.mp4)</label>
                       <input type="url" placeholder="https://files.catbox.moe/..." className="w-full bg-black/40 border border-white/5 p-5 rounded-2xl text-white text-xs outline-none focus:border-blue-500 font-mono transition-all" onChange={(e) => setForm({...form, videoUrl: e.target.value})} required />
                     </div>
 
                     {/* Tombol Submit di Paling Bawah */}
-                    <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-3xl text-[11px] uppercase tracking-[0.3em] shadow-xl active:scale-95 transition-all mt-6 shadow-blue-900/20">
+                    <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-3xl text-[11px] uppercase tracking-[0.3em] shadow-xl active:scale-95 transition-all mt-8 shadow-blue-900/20 leading-none">
                       {loading ? 'TRANSMITTING...' : 'Deploy Showcase'}
                     </button>
                     
-                    {/* Spacer tambahan agar tombol tidak tertutup navigasi browser */}
-                    <div className="h-10 md:hidden"></div>
+                    {/* Spacer tambahan agar tombol tidak mepet navigasi HP */}
+                    <div className="h-6 md:hidden"></div>
                   </form>
                 </div>
               </motion.div>
