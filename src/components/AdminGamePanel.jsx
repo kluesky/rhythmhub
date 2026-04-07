@@ -27,7 +27,7 @@ export default function AdminGamePanel({ isOpen, onClose }) {
     return () => { document.body.style.overflow = 'unset' }
   }, [isOpen])
 
-  const ADMIN_PASSWORD = 'admin123'
+  const ADMIN_PASSWORD = 'lyora6396'
   const modTypeOptions = ['VIP UNLOCKED', 'MEGA MOD', 'PREMIUM', 'UNLIMITED MONEY', 'AD-FREE']
   
   const statusOptions = [
