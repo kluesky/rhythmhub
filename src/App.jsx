@@ -64,12 +64,12 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Handler Download Langsung (Tanpa Captcha)
+  // Handler Download Langsung
   const handleDownloadIntent = (link) => {
     window.open(link, '_blank');
   }
 
-  // --- COMPUTED DATA (SORTING & PINNED LOGIC) ---
+  // --- COMPUTED DATA (LOGIC: PJSK ALWAYS #1) ---
   const processedGames = useMemo(() => {
     let result = [...games]
     
@@ -84,7 +84,7 @@ function App() {
       result = result.filter(g => g.name.toLowerCase().includes(q))
     }
 
-    // --- PRIORITY SORTING (PJSK ALWAYS #1) ---
+    // Sorting Priority: Project Sekai Always First
     return result.sort((a, b) => {
       const aName = a.name.toLowerCase()
       const bName = b.name.toLowerCase()
@@ -148,8 +148,8 @@ function App() {
             className="bg-red-950/10 border border-red-900/30 rounded-2xl p-6 mt-12 cursor-pointer hover:bg-red-900/20 transition-all group text-left"
           >
             <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest leading-relaxed">
-              Peringatan: Project Sekai berisiko tinggi banned, Baca Safety Guide Untuk Menghindari Banned. <br/>
-              <span className="text-white underline group-hover:text-blue-400 font-black">[  Baca Safety Guide Disini ]</span>
+              Peringatan: Project Sekai berisiko tinggi banned. Baca Safety Guide untuk mitigasi risiko. <br/>
+              <span className="text-white underline group-hover:text-blue-400 font-black">[ Buka Safety Guide Disini ]</span>
             </p>
           </div>
         </div>
@@ -205,13 +205,13 @@ function App() {
         </AnimatePresence>
       </main>
 
-      <footer className="bg-[#0b0d14] border-t border-gray-800/50 mt-32 pt-20 pb-10 relative z-10">
+      <footer className="bg-[#0b0d14] border-t border-gray-800/50 mt-32 pt-20 pb-10 relative z-10 text-left">
         <div className="container mx-auto px-4 max-w-7xl space-y-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-left">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="space-y-5">
               <div className="flex items-center gap-3">
                 <img src="https://files.catbox.moe/ce6atq.jpg" alt="Logo" className="w-10 h-10 rounded-xl object-cover border border-gray-800" />
-                <span className="font-black text-xl tracking-tighter uppercase">RHYTHM<span className="text-blue-500">HUB</span></span>
+                <span className="font-black text-xl tracking-tighter uppercase text-white">RHYTHM<span className="text-blue-500">HUB</span></span>
               </div>
               <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-widest">
                 Kurasi MOD APK terbaik dengan standar keamanan komunitas.
@@ -225,7 +225,12 @@ function App() {
               },
               { 
                 title: 'Library', 
-                links: [{ n: 'JP Version', f: 'jp' }, { n: 'AI Mods', f: 'ai' }, { n: 'Internet Tool', f: 'internet' }] 
+                links: [
+                    { n: 'JP Version', f: 'jp' }, 
+                    { n: 'AI Mods', f: 'ai' }, 
+                    { n: 'Internet Tool', f: 'internet' },
+                    { n: 'Showcase', p: '/showcase' }
+                ] 
               },
               { 
                 title: 'Legal', 
