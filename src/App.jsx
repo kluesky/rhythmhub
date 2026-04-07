@@ -13,7 +13,6 @@ import SearchSortBar from './components/SearchSortBar'
 import ActivityLog from './components/ActivityLog' 
 import MusicPlayer from './components/MusicPlayer'
 import DailyCard from './components/DailyCard'
-// Import Captcha
 
 // --- PAGES ---
 import About from './pages/About'
@@ -35,9 +34,6 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [currentPageState, setCurrentPageState] = useState(window.location.pathname)
   const [session, setSession] = useState(null)
-  
-  // State untuk Security Gateway (Captcha)
-  const [securityGate, setSecurityGate] = useState({ isOpen: false, link: '' });
   
   const itemsPerPage = 6
 
@@ -70,9 +66,9 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Handler Download dengan Captcha
+  // Handler Download langsung (tanpa captcha)
   const handleDownloadIntent = (link) => {
-    setSecurityGate({ isOpen: true, link: link });
+    window.open(link, '_blank')
   }
 
   // --- COMPUTED DATA (MEMOIZED) ---
@@ -278,11 +274,6 @@ function App() {
       {/* RENDER MODALS & LOGS */}
       <ActivityLog />
       <MusicPlayer />
-      <SecurityGateway 
-        isOpen={securityGate.isOpen} 
-        targetLink={securityGate.link} 
-        onClose={() => setSecurityGate({ ...securityGate, isOpen: false })} 
-      />
     </div>
   )
 }
