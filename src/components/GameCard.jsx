@@ -1,9 +1,8 @@
+// src/components/GameCard.jsx
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function GameCard({ game, onDownload }) {
   const isPjsk = game.name?.toLowerCase().includes("project sekai");
-  
-  // Logic Status
   const isMaintenance = game.status === 'danger';
   const isHighRisk = game.status === 'warning';
 
@@ -58,9 +57,9 @@ export default function GameCard({ game, onDownload }) {
           </div>
         </div>
 
-        {/* CONTENT INFO */}
+        {/* INFO AREA */}
         <div className="text-left space-y-5">
-          <div className="space-y-3 text-left">
+          <div className="space-y-3">
             <h3 className="text-xl font-black text-white uppercase italic tracking-tighter leading-none group-hover:text-blue-400 transition-colors">
               {game.name}
             </h3>
@@ -89,7 +88,7 @@ export default function GameCard({ game, onDownload }) {
             </div>
             <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-left">
               {modFeatures.length > 0 ? modFeatures.map((feat, idx) => (
-                <div key={idx} className="flex items-center gap-1.5">
+                <div key={idx} className="flex items-center gap-1.5 text-left">
                   <div className={`w-1 h-1 rounded-full ${isMaintenance ? 'bg-gray-600' : 'bg-blue-600'}`}></div>
                   <span className="text-[10px] text-gray-300 font-bold uppercase tracking-tight">{feat}</span>
                 </div>
