@@ -1,4 +1,3 @@
-// src/components/AdminGamePanel.jsx - FINAL FIX
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getAllGamesFromPastefy, addGameToPastefy, updateGameOnPastefy, deleteGameFromPastefy } from '../api/pastefy'
@@ -12,12 +11,14 @@ export default function AdminGamePanel({ isOpen, onClose }) {
   const [isAdding, setIsAdding] = useState(false)
   const [editingGame, setEditingGame] = useState(null)
   
+  // STATE BARU UNTUK CUSTOM CONFIRM
+  const [deleteConfirm, setDeleteConfirm] = useState({ show: false, id: null, name: '' })
+  
   const [isVersionOpen, setIsVersionOpen] = useState(false)
   const [isStatusOpen, setIsStatusOpen] = useState(false)
   
   const { addToast } = useToast()
 
-  // LOCK BODY SCROLL: Mencegah background ikut gerak saat modal dibuka
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -27,7 +28,7 @@ export default function AdminGamePanel({ isOpen, onClose }) {
     return () => { document.body.style.overflow = 'unset' }
   }, [isOpen])
 
-  const ADMIN_PASSWORD = 'lyora6396'
+  const ADMIN_PASSWORD = 'admin123'
   const modTypeOptions = ['VIP UNLOCKED', 'MEGA MOD', 'PREMIUM', 'UNLIMITED MONEY', 'AD-FREE']
   
   const statusOptions = [
@@ -114,13 +115,17 @@ export default function AdminGamePanel({ isOpen, onClose }) {
     setIsAdding(false)
   }
 
-  const handleDelete = async (gameId, gameName) => {
-    if (confirm(`Hapus permanen "${gameName}"?`)) {
-      const result = await deleteGameFromPastefy(gameId)
-      if (result.success) {
-        addToast(`🗑️ DELETED: ${gameName}`, 'success')
-        await loadGames()
-      }
+  // FUNGSI DELETE YANG SUDAH DIUPDATE
+  const confirmDelete = (gameId, gameName) => {
+    setDeleteConfirm({ show: true, id: gameId, name: gameName })
+  }
+
+  const executeDelete = async () => {
+    const result = await deleteGameFromPastefy(deleteConfirm.id)
+    if (result.success) {
+      addToast(`🗑️ DELETED: ${deleteConfirm.name}`, 'success')
+      setDeleteConfirm({ show: false, id: null, name: '' })
+      await loadGames()
     }
   }
 
@@ -128,6 +133,50 @@ export default function AdminGamePanel({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-[#05060a]/90 backdrop-blur-xl px-4 py-4 md:py-10">
+      
+      {/* --- CUSTOM DELETE CONFIRM MODAL --- */}
+      <AnimatePresence>
+        {deleteConfirm.show && (
+          <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setDeleteConfirm({ show: false, id: null, name: '' })}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative bg-[#161b2c] border border-red-500/30 rounded-[2rem] p-8 w-full max-w-sm shadow-2xl text-center"
+            >
+              <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-red-500/20">
+                <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1v3M4 7h16" />
+                </svg>
+              </div>
+              <h3 className="text-white font-black uppercase italic tracking-tighter text-xl mb-2">Confirm Delete?</h3>
+              <p className="text-gray-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed mb-8 px-4">
+                You are about to permanently wipe <span className="text-red-400">"{deleteConfirm.name}"</span> from mainframe database.
+              </p>
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setDeleteConfirm({ show: false, id: null, name: '' })}
+                  className="flex-1 bg-white/5 hover:bg-white/10 text-gray-400 font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={executeDelete}
+                  className="flex-1 bg-red-600 hover:bg-red-500 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-lg shadow-red-900/20 active:scale-95 transition-all"
+                >
+                  Wipe Data
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: 20 }} 
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -155,7 +204,7 @@ export default function AdminGamePanel({ isOpen, onClose }) {
             <div className="max-w-xs mx-auto py-24 space-y-6 text-center">
                <h3 className="text-white font-black uppercase italic tracking-tighter text-xl">Authorized Only</h3>
                <form onSubmit={handleLogin} className="space-y-4">
-                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-6 py-4 bg-black/40 border border-white/5 text-white rounded-2xl focus:border-blue-500 text-center font-mono outline-none" placeholder="ENTER PASSKEY" />
+                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-black/40 border border-white/5 text-white rounded-2xl focus:border-blue-500 text-center font-mono outline-none" placeholder="ENTER PASSKEY" />
                   <button type="submit" className="w-full bg-blue-600 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-900/20 uppercase tracking-widest text-xs">Verify Terminal</button>
                </form>
             </div>
@@ -202,12 +251,12 @@ export default function AdminGamePanel({ isOpen, onClose }) {
                         <InputField label="Genre Tag" value={formData.genre} onChange={(v) => setFormData({...formData, genre: v})} />
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-2 text-left">
                         <label className="text-[9px] font-black text-blue-500 uppercase ml-2 tracking-widest italic leading-none">Manifest Description</label>
                         <textarea placeholder="Brief information..." value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} className="w-full px-5 py-4 bg-black/40 border border-white/5 rounded-2xl outline-none text-sm text-gray-400 resize-none h-24 focus:border-blue-500 transition-all" />
                       </div>
 
-                      <div className="space-y-3">
+                      <div className="space-y-3 text-left">
                         <label className="text-[9px] font-black text-blue-500 uppercase ml-2 tracking-widest italic leading-none">Mod Capability Matrix:</label>
                         <div className="flex flex-wrap gap-2">
                           {modTypeOptions.map(type => (
@@ -219,7 +268,7 @@ export default function AdminGamePanel({ isOpen, onClose }) {
                       <InputField label="Asset Banner URL" value={formData.imageUrl} onChange={(v) => setFormData({...formData, imageUrl: v})} />
                       <InputField label="Direct Source Link" value={formData.playstoreLink} onChange={(v) => setFormData({...formData, playstoreLink: v})} />
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
                         <div className="space-y-2">
                           <label className="text-[9px] font-black text-blue-500 uppercase ml-2 italic tracking-widest leading-none">Original Features</label>
                           <textarea placeholder="Feature A, Feature B..." value={formData.features} onChange={(e) => setFormData({...formData, features: e.target.value})} className="w-full px-5 py-4 bg-black/40 border border-white/5 rounded-2xl outline-none text-[11px] text-gray-400 resize-none h-24 focus:border-blue-500 font-mono" />
@@ -252,7 +301,8 @@ export default function AdminGamePanel({ isOpen, onClose }) {
                       </div>
                       <div className="flex gap-3 w-full md:w-auto">
                         <button onClick={() => handleEdit(game)} className="flex-1 md:flex-none px-6 py-3 bg-white/5 text-gray-500 rounded-xl font-black text-[9px] uppercase hover:text-white transition-all">Edit</button>
-                        <button onClick={() => handleDelete(game.id, game.name)} className="flex-1 md:flex-none px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-black text-[9px] uppercase hover:bg-red-500 transition-all">Wipe</button>
+                        {/* UPDATE TOMBOL WIPE DISINI */}
+                        <button onClick={() => confirmDelete(game.id, game.name)} className="flex-1 md:flex-none px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-black text-[9px] uppercase hover:bg-red-500 hover:text-white transition-all">Wipe</button>
                       </div>
                     </div>
                   ))
