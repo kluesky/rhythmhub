@@ -13,7 +13,7 @@ import SearchSortBar from './components/SearchSortBar'
 import ActivityLog from './components/ActivityLog' 
 import MusicPlayer from './components/MusicPlayer'
 import DailyCard from './components/DailyCard'
-import SecurityGateway from './components/SecurityGateway' // Import Captcha
+// Import Captcha
 
 // --- PAGES ---
 import About from './pages/About'
