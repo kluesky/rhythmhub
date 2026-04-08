@@ -8,6 +8,9 @@ export default function GameCard({ game, onDownload }) {
   const isMaintenance = game.status === 'danger';
   const isHighRisk = game.status === 'warning';
 
+  // Integrasi fitur baru: Cek apakah genre adalah 18+
+  const isAdultContent = game.genre?.trim() === "18+";
+
   const modFeatures = Array.isArray(game.modFeatures) 
     ? game.modFeatures 
     : game.modFeatures?.split(',').map(f => f.trim()) || [];
@@ -40,10 +43,14 @@ export default function GameCard({ game, onDownload }) {
             <div className="absolute inset-0 bg-gradient-to-t from-[#0f111a] via-transparent to-transparent opacity-80"></div>
             
             {/* TAG AREA (VERSION & GENRE) */}
-            <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
-              {/* TAG GENRE/GAME TYPE (DIAMBIL DARI FORM ADMIN) */}
+            <div className="absolute bottom-4 left-4 flex flex-wrap gap-2 z-10">
+              {/* TAG GENRE/GAME TYPE */}
               {game.genre && (
-                <span className="text-[8px] font-black px-3 py-1 rounded-lg bg-white/10 backdrop-blur-md text-white border border-white/10 uppercase tracking-widest">
+                <span className={`text-[8px] font-black px-3 py-1 rounded-lg uppercase tracking-widest transition-all ${
+                  isAdultContent 
+                    ? 'bg-red-600 text-white border border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.7)]' // Merah terang menyala (Glow)
+                    : 'bg-white/10 backdrop-blur-md text-white border border-white/10' // Normal genre
+                }`}>
                   {game.genre}
                 </span>
               )}
