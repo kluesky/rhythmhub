@@ -38,8 +38,20 @@ export default function GameCard({ game, onDownload }) {
           <div className="aspect-video rounded-[1.8rem] overflow-hidden border border-white/5 relative bg-[#0f111a]">
             <img src={game.imageUrl || 'https://via.placeholder.com/400x225'} alt={game.name} className={`w-full h-full object-cover transition-transform duration-700 ${isMaintenance ? 'grayscale opacity-50' : 'group-hover:scale-105'}`} />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0f111a] via-transparent to-transparent opacity-80"></div>
-            <div className="absolute bottom-4 left-4 flex gap-2">
-              <span className={`text-[8px] font-black px-3 py-1 rounded-lg border uppercase tracking-widest ${game.version === 'JP' ? 'bg-red-500 text-white border-red-400' : 'bg-blue-600 text-white border-blue-400'}`}>{game.version}</span>
+            
+            {/* TAG AREA (VERSION & GENRE) */}
+            <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
+              {/* TAG GENRE/GAME TYPE (DIAMBIL DARI FORM ADMIN) */}
+              {game.genre && (
+                <span className="text-[8px] font-black px-3 py-1 rounded-lg bg-white/10 backdrop-blur-md text-white border border-white/10 uppercase tracking-widest">
+                  {game.genre}
+                </span>
+              )}
+              
+              <span className={`text-[8px] font-black px-3 py-1 rounded-lg border uppercase tracking-widest ${game.version === 'JP' ? 'bg-red-500 text-white border-red-400' : 'bg-blue-600 text-white border-blue-400'}`}>
+                {game.version}
+              </span>
+              
               {isMaintenance && <span className="text-[8px] font-black px-3 py-1 rounded-lg bg-black text-red-500 border border-red-500/50 uppercase tracking-widest">Offline</span>}
             </div>
           </div>
