@@ -23,7 +23,7 @@ export default function SearchBar({ searchQuery, setSearchQuery }) {
         {/* Input Field */}
         <input
           type="text"
-          placeholder="Cari Game Rhythm..."
+          placeholder="Search Game..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full pl-11 pr-11 py-3 bg-[#161b2c] border border-gray-800 rounded-2xl text-white text-sm font-medium placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all duration-300 tracking-tight"
