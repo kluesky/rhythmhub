@@ -18,14 +18,14 @@ export default function RequestList() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { addToast } = useToast()
 
-  // Mapping Status ke Style UI
+  // Status to UI Style Mapping
   const statusConfig = {
     'pending': { label: 'Pending', color: 'text-gray-400', bg: 'bg-gray-500/10', border: 'border-gray-500/20' },
     'checking bypass': { label: 'Checking Bypass', color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/20' },
     'on test': { label: 'On Test', color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20' },
     'complete': { label: 'Complete', color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
     'mod available': { label: 'Mod Available', color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' },
-    'done': { label: 'Mod Available', color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' } // Fallback untuk data lama
+    'done': { label: 'Mod Available', color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' } // Fallback for old data
   }
 
   const versionOptions = [
@@ -49,17 +49,17 @@ export default function RequestList() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!newRequest.gameName.trim()) {
-      addToast('⚠️ Nama game wajib diisi!', 'warning')
+      addToast('⚠️ Game name is required!', 'warning')
       return
     }
     setIsSubmitting(true)
     const result = await addRequestToPastefy(newRequest)
     if (result.success) {
-      addToast('✅ Request berhasil dikirim!', 'success')
+      addToast('✅ Request sent successfully!', 'success')
       setNewRequest({ gameName: '', version: 'Both', modFeatures: '', requester: '', email: '', message: '' })
       await loadRequests()
     } else {
-      addToast('❌ Gagal mengirim request', 'error')
+      addToast('❌ Failed to send request', 'error')
     }
     setIsSubmitting(false)
   }
@@ -67,30 +67,30 @@ export default function RequestList() {
   const handleUpvote = async (id, currentUpvotes) => {
     const result = await updateRequestUpvote(id, currentUpvotes)
     if (result.success) {
-      addToast('👍 Dukungan berhasil dikirim!', 'success')
+      addToast('👍 Support sent successfully!', 'success')
       await loadRequests()
     }
   }
 
   const formatTime = (timestamp) => {
-    if (!timestamp) return 'Baru saja'
+    if (!timestamp) return 'Just now'
     const date = new Date(timestamp)
     const now = new Date()
     const diff = Math.floor((now - date) / 1000 / 60)
-    if (diff < 1) return 'Baru saja'
-    if (diff < 60) return `${diff}m lalu`
-    if (diff < 1440) return `${Math.floor(diff / 60)}j lalu`
-    return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+    if (diff < 1) return 'Just now'
+    if (diff < 60) return `${diff}m ago`
+    if (diff < 1440) return `${Math.floor(diff / 60)}h ago`
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
   }
 
   return (
     <div className="space-y-8 pb-10">
-      {/* --- FORM REQUEST --- */}
+      {/* --- REQUEST FORM --- */}
       <div className="bg-[#161b2c] rounded-2xl shadow-2xl border border-gray-800 p-6 overflow-visible">
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-bold text-white flex items-center gap-2 tracking-tight uppercase text-xs italic">
             <span className="p-2 bg-blue-500/10 rounded-lg text-lg">📝</span> 
-            Request Mod Game
+            Game Mod Request
           </h3>
           <span className="text-[10px] font-black bg-[#14321a] text-[#4ade80] px-2 py-1 rounded border border-[#1e5128] uppercase tracking-widest">
             Live Server
@@ -100,7 +100,7 @@ export default function RequestList() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 tracking-widest">Nama Game *</label>
+              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 tracking-widest">Game Name *</label>
               <input type="text" placeholder="Project Sekai / MLBB..." value={newRequest.gameName} onChange={(e) => setNewRequest({...newRequest, gameName: e.target.value})}
                 className="w-full px-4 py-3 bg-[#0f111a] border border-gray-800 text-white rounded-xl focus:border-blue-500 outline-none transition-all text-sm" required />
             </div>
@@ -133,15 +133,15 @@ export default function RequestList() {
               </AnimatePresence>
             </div>
             <div className="space-y-1.5">
-              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 tracking-widest">Email (Notifikasi)</label>
+              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 tracking-widest">Email (Notification)</label>
               <input type="email" placeholder="Optional..." value={newRequest.email} onChange={(e) => setNewRequest({...newRequest, email: e.target.value})}
                 className="w-full px-4 py-3 bg-[#0f111a] border border-gray-800 text-white rounded-xl focus:border-blue-500 outline-none transition-all text-sm" />
             </div>
           </div>
           
           <div className="space-y-1.5 text-left">
-            <label className="text-[10px] font-black text-gray-500 uppercase ml-1 tracking-widest">Fitur Mod Spesifik</label>
-            <textarea placeholder="Contoh: Auto Perfect, Unlock Skins, Menu Mod..." value={newRequest.modFeatures} onChange={(e) => setNewRequest({...newRequest, modFeatures: e.target.value})} rows={2}
+            <label className="text-[10px] font-black text-gray-500 uppercase ml-1 tracking-widest">Specific Mod Features</label>
+            <textarea placeholder="Example: Auto Perfect, Unlock Skins, Mod Menu..." value={newRequest.modFeatures} onChange={(e) => setNewRequest({...newRequest, modFeatures: e.target.value})} rows={2}
               className="w-full px-4 py-3 bg-[#0f111a] border border-gray-800 text-white rounded-xl focus:border-blue-500 outline-none transition-all text-sm resize-none" />
           </div>
           

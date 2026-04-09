@@ -8,7 +8,7 @@ export default function GameCard({ game, onDownload }) {
   const isMaintenance = game.status === 'danger';
   const isHighRisk = game.status === 'warning';
 
-  // Integrasi fitur baru: Cek apakah genre adalah 18+
+  // New feature integration: Check if genre is 18+
   const isAdultContent = game.genre?.trim() === "18+";
 
   const modFeatures = Array.isArray(game.modFeatures) 
@@ -48,7 +48,7 @@ export default function GameCard({ game, onDownload }) {
               {game.genre && (
                 <span className={`text-[8px] font-black px-3 py-1 rounded-lg uppercase tracking-widest transition-all ${
                   isAdultContent 
-                    ? 'bg-red-600 text-white border border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.7)]' // Merah terang menyala (Glow)
+                    ? 'bg-red-600 text-white border border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.7)]' // Bright glowing red
                     : 'bg-white/10 backdrop-blur-md text-white border border-white/10' // Normal genre
                 }`}>
                   {game.genre}

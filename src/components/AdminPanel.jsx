@@ -10,7 +10,7 @@ export default function AdminPanel({ isOpen, onClose }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const { addToast } = useToast()
 
-  const ADMIN_PASSWORD = 'lyora6396'
+  const ADMIN_PASSWORD = 'admin123'
 
   // Label diperpendek agar muat dalam grid kecil
   const statusOptions = [
