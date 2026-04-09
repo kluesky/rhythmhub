@@ -34,18 +34,23 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [currentPageState, setCurrentPageState] = useState(window.location.pathname)
   const [session, setSession] = useState(null)
+  
+  // New Features: Database & Daily Content
   const [databaseStatus, setDatabaseStatus] = useState('syncing') // online, offline, syncing
+  const [dailyContent, setDailyContent] = useState(null)
 
   const itemsPerPage = 6
 
-  // --- EFFECTS ---
+  // --- EFFECTS: LOAD ALL DATA ---
   useEffect(() => {
+    // Load User Session
     const savedSession = localStorage.getItem('hub_session')
     if (savedSession) setSession(JSON.parse(savedSession))
 
-    const loadGames = async () => {
+    const fetchData = async () => {
       setLoading(true)
       try {
+        // 1. Fetch Games & Check Pulse
         const result = await getAllGamesFromPastefy()
         if (result.success) {
           setGames(result.games)
@@ -53,31 +58,38 @@ function App() {
         } else {
           setDatabaseStatus('offline')
         }
+
+        // 2. Fetch Daily Spotlight (Get from your Pastefy endpoint)
+        // If you store daily in a different folder/id, call the API here
+        // const dailyResult = await getDailyFromPastefy()
+        // if (dailyResult.success) setDailyContent(dailyResult.data)
+        
       } catch (error) {
         setDatabaseStatus('offline')
       } finally {
         setLoading(false)
       }
     }
-    loadGames()
+    fetchData()
   }, [])
 
+  // Navigation Logic
   useEffect(() => {
     const handlePopState = () => setCurrentPageState(window.location.pathname)
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
-  // --- HANDLERS ---
   const navigateTo = (path) => {
     window.history.pushState({}, '', path)
     setCurrentPageState(path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // --- HANDLERS ---
   const handleDownloadIntent = (link) => {
     if (link && link.trim() !== "") {
-      window.open(link, '_blank', 'noopener,noreferrer')
+      window.open(link, '_blank', 'noopener,noreferrer');
     }
   }
 
@@ -89,17 +101,16 @@ function App() {
       return { 
         version: version?.trim() || 'N/A', 
         date: date?.trim() || 'N/A', 
-        note: note?.trim() || 'No Detail' 
+        note: note?.trim() || 'No detail' 
       }
     })
   }
 
-  // --- COMPUTED DATA (SORTING & INJECTION) ---
+  // --- COMPUTED DATA (SORTING & FILTERING) ---
   const processedGames = useMemo(() => {
     // Inject parsed changelog data
     let result = games.map(g => ({ ...g, changelogData: parseChangelog(g.changelogRaw) }))
     
-    // Filter logic
     if (filter === 'jp') result = result.filter(g => g.version === 'JP')
     if (filter === 'global') result = result.filter(g => g.version === 'Global')
     if (filter === 'ai') result = result.filter(g => g.category === 'AI')
@@ -110,7 +121,7 @@ function App() {
       result = result.filter(g => g.name.toLowerCase().includes(q))
     }
 
-    // Priority Sorting (Project Sekai Always First)
+    // PJSK Always #1
     return result.sort((a, b) => {
       const aName = a.name.toLowerCase()
       const bName = b.name.toLowerCase()
@@ -141,7 +152,7 @@ function App() {
   const renderHome = () => (
     <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       
-      {/* Real-time Connection Failure Banner */}
+      {/* DB OFFLINE ALARM BANNER */}
       <AnimatePresence>
         {databaseStatus === 'offline' && (
           <motion.div 
@@ -150,11 +161,11 @@ function App() {
             exit={{ height: 0, opacity: 0 }}
             className="mb-8 overflow-hidden"
           >
-            <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-3 text-left">
+            <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 text-left">
+              <div className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shrink-0"></div>
-                <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest">
-                  Mainframe Connection Failure: Pastefy API is currently unreachable. System is in read-only local mode.
+                <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest leading-none">
+                  Critical Error: Mainframe Sync Failed. Database is unreachable.
                 </p>
               </div>
               <button 
@@ -168,14 +179,13 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* Hero Section */}
       <div className="text-center mb-16 space-y-4">
         <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white italic">
           RHYTHM<span className="text-blue-600">HUB</span>
         </h1>
-        <p className="text-gray-500 max-w-2xl mx-auto font-medium text-[10px] uppercase tracking-[0.4em] leading-loose">
-          Platform kurasi MOD APK berkualitas. <br/>
-          Download aman, instalasi mudah, pembaruan rutin.
+        <p className="text-gray-500 max-w-2xl mx-auto font-medium text-[10px] uppercase tracking-[0.4em] leading-loose text-left">
+          Quality MOD APK curation platform. <br/>
+          Safe download, easy installation, regular updates.
         </p>
       </div>
 
@@ -185,13 +195,18 @@ function App() {
           <FilterBar filter={filter} setFilter={setFilter} />
           
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-24 space-y-4">
+            <div className="flex flex-col items-center justify-center py-24 space-y-4 text-left">
               <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-[10px] font-black text-gray-600 tracking-widest uppercase">Synchronizing Mainframe...</p>
+              <p className="text-[10px] font-black text-gray-600 tracking-widest uppercase">Syncing Protocol...</p>
             </div>
           ) : (
             <div className="space-y-12">
-              <GameGrid games={paginatedGames} onDownload={handleDownloadIntent} />
+              {/* PASS DATABASE STATUS TO GRID */}
+              <GameGrid 
+                games={paginatedGames} 
+                onDownload={handleDownloadIntent} 
+                dbStatus={databaseStatus} 
+              />
               {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />}
             </div>
           )}
@@ -201,17 +216,18 @@ function App() {
             className="bg-red-950/10 border border-red-900/30 rounded-2xl p-6 mt-12 cursor-pointer hover:bg-red-900/20 transition-all group text-left"
           >
             <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest leading-relaxed">
-              Peringatan: Project Sekai berisiko tinggi banned. Baca Safety Guide untuk mitigasi risiko. <br/>
-              <span className="text-white underline group-hover:text-blue-400 font-black">[ Buka Safety Guide Disini ]</span>
+              Warning: Project Sekai has high ban risk. Read the Safety Guide for risk mitigation. <br/>
+              <span className="text-white underline group-hover:text-blue-400 font-black">[ Open Safety Guide Here ]</span>
             </p>
           </div>
         </div>
 
-        {/* Sidebar */}
         <aside className="lg:col-span-4 xl:col-span-3 space-y-8 relative z-[40]">
           <div className="sticky top-28 space-y-8">
-            <DailyCard />
-            <div className="bg-[#161b2c]/40 border border-white/5 rounded-3xl p-6 backdrop-blur-xl text-left">
+            {/* DAILY SPOTLIGHT INTEGRATION */}
+            <DailyCard dailyContent={dailyContent} />
+
+            <div className="bg-[#161b2c]/40 border border-white/5 rounded-3xl p-6 backdrop-blur-xl text-left text-left">
                <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-4 block leading-none">System Status</span>
                <div className="space-y-3 font-bold text-[10px]">
                   <div className="flex justify-between">
@@ -232,13 +248,7 @@ function App() {
 
   const renderContent = () => {
     const routes = {
-      '/about': <About />,
-      '/request': <Request />,
-      '/privacy': <Privacy />,
-      '/terms': <Terms />,
-      '/admin-daily': <AdminDaily />,
-      '/showcase': <Showcase />,
-      '/pjsk-guide': <PjskGuide />
+      '/about': <About />, '/request': <Request />, '/privacy': <Privacy />, '/terms': <Terms />, '/admin-daily': <AdminDaily />, '/showcase': <Showcase />, '/pjsk-guide': <PjskGuide />
     }
     return routes[currentPageState] || renderHome()
   }
@@ -250,70 +260,46 @@ function App() {
         activePage={currentPageState} 
         user={session} 
         onLogout={() => { localStorage.removeItem('hub_session'); setSession(null); }} 
-        dbStatus={databaseStatus}
+        dbStatus={databaseStatus} // Pass to Navbar
       />
-      
-      <main className="container mx-auto px-4 py-12 max-w-7xl relative z-10">
-        <AnimatePresence mode="wait">
-          {renderContent()}
-        </AnimatePresence>
+      <main className="container mx-auto px-4 py-12 max-w-7xl relative z-10 text-left">
+        <AnimatePresence mode="wait">{renderContent()}</AnimatePresence>
       </main>
-
       <footer className="bg-[#0b0d14] border-t border-gray-800/50 mt-32 pt-20 pb-10 relative z-10 text-left">
         <div className="container mx-auto px-4 max-w-7xl space-y-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-left">
             <div className="space-y-5">
               <div className="flex items-center gap-3">
                 <img src="https://files.catbox.moe/ce6atq.jpg" alt="Logo" className="w-10 h-10 rounded-xl object-cover border border-gray-800" />
                 <span className="font-black text-xl tracking-tighter uppercase text-white italic">RHYTHM<span className="text-blue-500">HUB</span></span>
               </div>
-              <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-widest">
-                Kurasi MOD APK terbaik dengan standar keamanan komunitas.
-              </p>
+              <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-widest text-left">The best MOD APK curation with community security standards.</p>
             </div>
-
             {[
-              { 
-                title: 'Navigation', 
-                links: [{ n: 'Home', p: '/' }, { n: 'About', p: '/about' }, { n: 'Request', p: '/request' }, { n: 'Safety Guide', p: '/pjsk-guide' }] 
-              },
-              { 
-                title: 'Library', 
-                links: [{ n: 'JP Version', f: 'jp' }, { n: 'AI Mods', f: 'ai' }, { n: 'Internet Tool', f: 'internet' }, { n: 'Showcase', p: '/showcase' }] 
-              },
-              { 
-                title: 'Legal', 
-                links: [{ n: 'Privacy', p: '/privacy' }, { n: 'Terms', p: '/terms' }] 
-              }
+              { title: 'Navigation', links: [{ n: 'Home', p: '/' }, { n: 'About', p: '/about' }, { n: 'Request', p: '/request' }, { n: 'Safety Guide', p: '/pjsk-guide' }] },
+              { title: 'Library', links: [{ n: 'JP Version', f: 'jp' }, { n: 'AI Mods', f: 'ai' }, { n: 'Internet Tool', f: 'internet' }, { n: 'Showcase', p: '/showcase' }] },
+              { title: 'Legal', links: [{ n: 'Privacy', p: '/privacy' }, { n: 'Terms', p: '/terms' }] }
             ].map((col, i) => (
-              <div key={i} className="space-y-5">
+              <div key={i} className="space-y-5 text-left">
                 <h4 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{col.title}</h4>
                 <ul className="space-y-3">
                   {col.links.map((l, j) => (
                     <li key={j}>
-                      <button 
-                        onClick={() => { if(l.p) navigateTo(l.p); if(l.f) { setFilter(l.f); navigateTo('/'); } }} 
-                        className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest"
-                      >
-                        {l.n}
-                      </button>
+                      <button onClick={() => { if(l.p) navigateTo(l.p); if(l.f) { setFilter(l.f); navigateTo('/'); } }} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest">{l.n}</button>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-
-          <div className="pt-10 border-t border-gray-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-[9px] font-bold text-gray-700 uppercase tracking-[0.3em]">
+          <div className="pt-10 border-t border-gray-800/50 text-[9px] font-bold text-gray-700 uppercase tracking-[0.3em] text-left">
             <p>© 2026 RhythmHub. Secured Database System.</p>
           </div>
         </div>
       </footer>
-
       <ActivityLog />
       <MusicPlayer />
     </div>
   )
 }
-
 export default App;
