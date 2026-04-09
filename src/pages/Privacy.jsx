@@ -4,24 +4,24 @@ import { motion } from 'framer-motion'
 export default function Privacy() {
   const policies = [
     {
-      title: 'Informasi yang Kami Kumpulkan',
-      content: 'Saat Anda menggunakan fitur "Request Game" atau "Feedback", kami mengumpulkan data publik seperti Username (opsional), Email (opsional), dan detail game yang diminta. Kami tidak mengumpulkan data pribadi sensitif secara otomatis tanpa persetujuan Anda.'
+      title: 'Information We Collect',
+      content: 'When you use the "Game Request" or "Feedback" features, we collect public data such as Username (optional), Email (optional), and requested game details. We do not automatically collect sensitive personal data without your consent.'
     },
     {
-      title: 'Penggunaan Data',
-      content: 'Data yang dikumpulkan digunakan murni untuk keperluan pengembangan katalog game, sinkronisasi status MOD di database cloud kami, serta menanggapi masukan atau keluhan yang Anda kirimkan.'
+      title: 'Data Usage',
+      content: 'Collected data is used purely for game catalog development purposes, MOD status synchronization in our cloud database, and responding to feedback or complaints you submit.'
     },
     {
-      title: 'Keamanan Data Cloud',
-      content: 'RhythmHub menggunakan infrastruktur pihak ketiga (Pastefy API) untuk menyimpan data request. Meskipun kami berupaya menjaga integritas data, perlu dipahami bahwa pengiriman data melalui internet tidak pernah 100% aman.'
+      title: 'Cloud Data Security',
+      content: 'RhythmHub uses third-party infrastructure (Pastefy API) to store request data. Although we strive to maintain data integrity, you should understand that data transmission over the internet is never 100% secure.'
     },
     {
-      title: 'Cookies & Pelacakan',
-      content: 'Kami menggunakan penyimpanan lokal browser (Local Storage) untuk menyimpan preferensi bahasa dan session login Anda agar pengalaman penggunaan tetap mulus tanpa harus mengatur ulang setiap kali kunjungan.'
+      title: 'Cookies & Tracking',
+      content: 'We use browser local storage to save your language preferences and login session so your experience remains smooth without having to reset everything on each visit.'
     },
     {
-      title: 'Tautan Pihak Ketiga',
-      content: 'Website kami berisi tautan ke Playstore atau file hosting luar. Kami tidak bertanggung jawab atas kebijakan privasi atau konten dari situs pihak ketiga tersebut.'
+      title: 'Third-Party Links',
+      content: 'Our website contains links to the Playstore or external hosting files. We are not responsible for the privacy policies or content of those third-party sites.'
     }
   ]
 
@@ -48,7 +48,7 @@ export default function Privacy() {
           {/* --- INTRO BANNER --- */}
           <div className="bg-blue-600/5 border border-blue-500/20 rounded-2xl p-6">
             <p className="text-sm text-blue-400 font-medium leading-relaxed">
-              Privasi Anda adalah prioritas kami. RhythmHub berkomitmen untuk meminimalkan pengumpulan data pribadi demi keamanan dan kenyamanan pengguna dalam mengakses layanan kami.
+              Your privacy is our priority. RhythmHub is committed to minimizing personal data collection for the security and convenience of users accessing our services.
             </p>
           </div>
 
@@ -80,7 +80,7 @@ export default function Privacy() {
               <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
-              Kembali ke Halaman Utama
+              Back to Home
             </button>
             
             <p className="text-[11px] text-gray-600 font-medium">

@@ -4,28 +4,28 @@ export default function Terms() {
   const sections = [
     {
       id: '01',
-      title: 'Penerimaan Ketentuan',
-      content: 'Dengan mengakses dan menggunakan platform RhythmHub, Anda dianggap telah membaca, memahami, dan menyetujui untuk terikat oleh seluruh syarat dan ketentuan yang berlaku di halaman ini.'
+      title: 'Acceptance of Terms',
+      content: 'By accessing and using the RhythmHub platform, you are deemed to have read, understood, and agreed to be bound by all applicable terms and conditions on this page.'
     },
     {
       id: '02',
-      title: 'Penggunaan Layanan (Edukasi)',
-      content: 'Seluruh konten MOD APK yang tersedia di platform ini disediakan murni untuk tujuan edukasi, pengujian fitur, dan analisis teknis. Kami tidak menyarankan penggunaan file ini untuk mendapatkan keuntungan tidak adil dalam kompetisi.'
+      title: 'Use of Service (Educational)',
+      content: 'All MOD APK content available on this platform is provided purely for educational purposes, feature testing, and technical analysis. We do not recommend using these files to gain unfair advantages in competitions.'
     },
     {
       id: '03',
-      title: 'Risiko & Tanggung Jawab',
-      content: 'Penggunaan aplikasi modifikasi memiliki risiko terhadap keamanan akun. RhythmHub tidak bertanggung jawab atas segala bentuk kehilangan data, kerusakan perangkat, atau pemblokiran akun yang terjadi akibat penggunaan file dari platform kami.'
+      title: 'Risks & Responsibilities',
+      content: 'The use of modified applications carries risks to account security. RhythmHub is not responsible for any form of data loss, device damage, or account bans that occur as a result of using files from our platform.'
     },
     {
       id: '04',
-      title: 'Hak Cipta',
-      content: 'Seluruh aset, logo, dan nama game adalah hak cipta milik pengembang asli. RhythmHub adalah platform pihak ketiga dan tidak memiliki afiliasi resmi dengan pengembang game mana pun.'
+      title: 'Copyright',
+      content: 'All assets, logos, and game names are copyrighted by their respective developers. RhythmHub is a third-party platform and has no official affiliation with any game developers.'
     },
     {
       id: '05',
-      title: 'Perubahan Layanan',
-      content: 'Kami berhak untuk menambah, mengubah, atau menghapus konten di RhythmHub kapan saja tanpa pemberitahuan sebelumnya, termasuk memutus akses file jika ditemukan masalah keamanan.'
+      title: 'Service Changes',
+      content: 'We reserve the right to add, modify, or remove content on RhythmHub at any time without prior notice, including terminating file access if security issues are found.'
     }
   ]
 
@@ -43,7 +43,7 @@ export default function Terms() {
               Terms of Service
             </h1>
             <p className="text-gray-500 text-sm">
-              Terakhir diperbarui pada 7 April 2026
+              Last updated on April 7, 2026
             </p>
             <div className="h-1 w-12 bg-blue-600"></div>
           </div>
@@ -51,7 +51,7 @@ export default function Terms() {
           {/* Warning Section */}
           <div className="p-6 bg-red-500/5 border-l-4 border-red-500 rounded-r-xl">
             <p className="text-sm text-red-400 leading-relaxed font-medium">
-              Penting: Harap baca ketentuan ini dengan saksama. Jika Anda tidak menyetujui poin-poin di bawah ini, harap berhenti menggunakan layanan kami.
+              Important: Please read these terms carefully. If you do not agree with the points below, please stop using our services.
             </p>
           </div>
 
@@ -78,7 +78,7 @@ export default function Terms() {
               onClick={() => window.history.back()}
               className="px-6 py-2.5 text-sm font-semibold text-gray-300 hover:text-white border border-gray-800 hover:border-gray-600 rounded-lg transition-all"
             >
-              Kembali
+              Back
             </button>
             <p className="text-xs text-gray-600">
               RhythmHub Documentation &copy; 2026

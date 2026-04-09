@@ -41,7 +41,7 @@ export default function About() {
               RHYTHM<span className="text-blue-600">HUB</span>
             </h1>
             <p className="text-gray-500 max-w-xl mx-auto text-sm md:text-base font-medium leading-relaxed">
-              Pusat koleksi MOD APK Game Rhythm terbesar dengan fitur premium yang dikembangkan khusus untuk komunitas.
+              The largest collection of Rhythm Game MOD APKs with premium features specially developed for the community.
             </p>
           </div>
 
@@ -51,7 +51,7 @@ export default function About() {
             <div className="relative bg-gradient-to-br from-blue-700 to-blue-900 px-8 py-10 overflow-hidden">
                <div className="relative z-10">
                   <h2 className="text-2xl md:text-3xl font-black text-white mb-2 uppercase tracking-tight">#1 Rhythm MOD Provider</h2>
-                  <p className="text-blue-100/80 text-sm font-medium">Menghadirkan pengalaman bermain tanpa batas dengan fitur eksklusif.</p>
+                  <p className="text-blue-100/80 text-sm font-medium">Delivering an unlimited gaming experience with exclusive features.</p>
                </div>
                {/* Decorative Element */}
                <div className="absolute -right-10 -bottom-10 text-9xl opacity-10 font-black italic select-none">MUSIC</div>
@@ -59,22 +59,22 @@ export default function About() {
 
             <div className="p-8 md:p-10 space-y-10">
               
-              {/* SECTION: APA ITU */}
+              {/* SECTION: WHAT IS IT */}
               <section className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-1 bg-blue-600 rounded-full"></div>
-                  <h3 className="text-lg font-black text-white uppercase tracking-wider">🎯 Apa Itu RhythmHub?</h3>
+                  <h3 className="text-lg font-black text-white uppercase tracking-wider">🎯 What is RhythmHub?</h3>
                 </div>
                 <p className="text-gray-400 text-sm leading-loose">
-                  RhythmHub adalah platform independen yang berfokus pada modifikasi game rhythm populer. 
-                  Kami memahami tantangan dalam game rhythm, itulah mengapa kami menyediakan fitur seperti 
+                  RhythmHub is an independent platform focused on modifying popular rhythm games. 
+                  We understand the challenges in rhythm games, which is why we provide features like 
                   <span className="text-blue-400 font-bold"> Always Perfect</span>, 
-                  <span className="text-blue-400 font-bold"> Auto Dance</span>, dan 
-                  <span className="text-blue-400 font-bold"> Unlock All Songs</span> untuk membantu Anda menikmati konten game secara maksimal tanpa hambatan.
+                  <span className="text-blue-400 font-bold"> Auto Dance</span>, and 
+                  <span className="text-blue-400 font-bold"> Unlock All Songs</span> to help you enjoy game content to the fullest without barriers.
                 </p>
               </section>
 
-              {/* SECTION: FITUR MOD */}
+              {/* SECTION: MOD FEATURES */}
               <section className="space-y-5">
                 <h3 className="text-sm font-black text-gray-500 uppercase tracking-[0.2em]">⚡ Mod Capabilities</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -99,14 +99,14 @@ export default function About() {
                       </span>
                     ))}
                   </div>
-                  <p className="text-[10px] text-gray-600 font-bold italic">*Update rutin berdasarkan request komunitas.</p>
+                  <p className="text-[10px] text-gray-600 font-bold italic">*Regular updates based on community requests.</p>
                 </div>
 
                 {/* Step to Install */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-black text-gray-500 uppercase tracking-[0.2em]">📥 Installation Guide</h3>
                   <div className="space-y-3">
-                    {["Pilih Game & Versi", "Klik Download MOD APK", "Aktifkan Unknown Sources", "Install & Enjoy!"].map((step, i) => (
+                    {["Select Game & Version", "Click Download MOD APK", "Enable Unknown Sources", "Install & Enjoy!"].map((step, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-black flex items-center justify-center italic">{i + 1}</span>
                         <span className="text-xs text-gray-400 font-bold uppercase tracking-tight">{step}</span>
@@ -123,9 +123,9 @@ export default function About() {
                   <h3 className="text-xs font-black uppercase tracking-widest">Legal & Risk Disclaimer</h3>
                 </div>
                 <ul className="text-[11px] text-[#f87171]/80 space-y-1.5 list-none font-medium">
-                  <li className="flex items-start gap-2"><span className="opacity-50">●</span> Project Sekai memiliki risiko deteksi banned yang sangat tinggi.</li>
-                  <li className="flex items-start gap-2"><span className="opacity-50">●</span> Gunakan akun "Guest" atau "Smurf", jangan gunakan akun utama.</li>
-                  <li className="flex items-start gap-2"><span className="opacity-50">●</span> Segala kerugian akun adalah tanggung jawab pengguna sepenuhnya.</li>
+                  <li className="flex items-start gap-2"><span className="opacity-50">●</span> Project Sekai has a very high risk of account ban detection.</li>
+                  <li className="flex items-start gap-2"><span className="opacity-50">●</span> Use "Guest" or "Smurf" accounts, do NOT use your main account.</li>
+                  <li className="flex items-start gap-2"><span className="opacity-50">●</span> Any account loss is entirely the user's responsibility.</li>
                 </ul>
               </div>
 

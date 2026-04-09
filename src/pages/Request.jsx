@@ -34,8 +34,8 @@ export default function Request() {
             </h1>
             
             <p className="text-gray-500 max-w-xl mx-auto font-medium leading-relaxed uppercase tracking-wider text-[11px]">
-              Game favoritmu belum ada? Kirim permintaanmu sekarang. <br />
-              Pantau progres modifikasi secara <span className="text-blue-400 font-bold">Real-Time</span> melalui sistem Tracker kami.
+              Your favorite game not available yet? Submit your request now. <br />
+              Track modification progress in <span className="text-blue-400 font-bold">Real-Time</span> through our Tracker system.
             </p>
           </div>
 
@@ -85,8 +85,8 @@ export default function Request() {
                   <span className="text-blue-500">●</span> Status Tracker Info
                 </h4>
                 <p className="text-[10px] text-gray-500 font-medium leading-relaxed uppercase tracking-wider">
-                  Data disimpan di <span className="text-blue-400 font-bold">Cloud Server</span>. 
-                  Gunakan fitur voting untuk mempercepat proses riset modifikasi game pilihanmu.
+                  Data is stored on <span className="text-blue-400 font-bold">Cloud Server</span>. 
+                  Use the voting feature to speed up the research process for your chosen game modifications.
                 </p>
               </div>
               
