@@ -39,7 +39,7 @@ function App() {
   const [databaseStatus, setDatabaseStatus] = useState('syncing') // online, offline, syncing
   const [dailyContent, setDailyContent] = useState(null)
   
-  // Fitur Statistik User
+  // User Statistics Feature
   const [userStats, setUserStats] = useState(0)
 
   const itemsPerPage = 6
@@ -185,8 +185,8 @@ function App() {
       <div className="text-center mb-16 space-y-4">
         <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white italic">RHYTHM<span className="text-blue-600">HUB</span></h1>
         <p className="text-gray-500 max-w-2xl mx-auto font-medium text-[10px] uppercase tracking-[0.4em] leading-loose text-center">
-          Platform kurasi MOD APK khusus game rhythm dengan standar kualitas komunitas. <br/>
-          Download gratis, aman, dan terupdate.
+          MOD APK curation platform specifically for rhythm games with community quality standards. <br/>
+          Free, safe, and updated downloads.
         </p>
       </div>
 
@@ -216,8 +216,8 @@ function App() {
             className="bg-red-950/10 border border-red-900/30 rounded-2xl p-6 mt-12 cursor-pointer hover:bg-red-900/20 transition-all group text-left"
           >
             <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest leading-relaxed">
-              Peringatan: Project Sekai berisiko tinggi banned. Baca Safety Guide untuk mitigasi risiko. <br/>
-              <span className="text-white underline group-hover:text-blue-400 font-black uppercase">[ Buka Safety Guide Disini ]</span>
+              Warning: Project Sekai has a high risk of being banned. Read the Safety Guide for risk mitigation. <br/>
+              <span className="text-white underline group-hover:text-blue-400 font-black uppercase">[ Open Safety Guide Here ]</span>
             </p>
           </div>
         </div>
@@ -276,7 +276,7 @@ function App() {
                 <span className="font-black text-xl tracking-tighter uppercase text-white italic">RHYTHM<span className="text-blue-600">HUB</span></span>
               </div>
               <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-widest text-left">
-                Platform kurasi MOD APK khusus game rhythm dengan standar kualitas komunitas. Download gratis, aman, dan terupdate.
+                MOD APK curation platform specifically for rhythm games with community quality standards. Free, safe, and updated downloads.
               </p>
             </div>
 
