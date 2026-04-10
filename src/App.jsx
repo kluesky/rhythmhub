@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // --- API & SERVICES ---
-import { getAllGamesFromPastefy } from './api/pastefy'
+import { getAllGamesFromPastefy, getAllUsersFromPastefy } from './api/pastefy'
 
 // --- UI COMPONENTS ---
 import Navbar from './components/Navbar'
@@ -38,6 +38,9 @@ function App() {
   // New Features: Database & Daily Content
   const [databaseStatus, setDatabaseStatus] = useState('syncing') // online, offline, syncing
   const [dailyContent, setDailyContent] = useState(null)
+  
+  // Fitur Statistik User
+  const [userStats, setUserStats] = useState(0)
 
   const itemsPerPage = 6
 
@@ -50,21 +53,23 @@ function App() {
     const fetchData = async () => {
       setLoading(true)
       try {
-        // 1. Fetch Games & Check Pulse
+        // 1. Fetch Games
         const result = await getAllGamesFromPastefy()
         if (result.success) {
-          setGames(result.games)
+          setGames(result.games || [])
           setDatabaseStatus('online')
         } else {
           setDatabaseStatus('offline')
         }
 
-        // 2. Fetch Daily Spotlight (Get from your Pastefy endpoint)
-        // If you store daily in a different folder/id, call the API here
-        // const dailyResult = await getDailyFromPastefy()
-        // if (dailyResult.success) setDailyContent(dailyResult.data)
+        // 2. Fetch User Stats (ID: LvcKPvc9)
+        const userResult = await getAllUsersFromPastefy()
+        if (userResult.success) {
+          setUserStats(userResult.users?.length || 0)
+        }
         
       } catch (error) {
+        console.error("Mainframe Sync Error:", error)
         setDatabaseStatus('offline')
       } finally {
         setLoading(false)
@@ -109,12 +114,10 @@ function App() {
   // --- COMPUTED DATA (SORTING & FILTERING) ---
   const processedGames = useMemo(() => {
     // Inject parsed changelog data
-    let result = games.map(g => ({ ...g, changelogData: parseChangelog(g.changelogRaw) }))
+    let result = (games || []).map(g => ({ ...g, changelogData: parseChangelog(g.changelogRaw) }))
     
     if (filter === 'jp') result = result.filter(g => g.version === 'JP')
     if (filter === 'global') result = result.filter(g => g.version === 'Global')
-    if (filter === 'ai') result = result.filter(g => g.category === 'AI')
-    if (filter === 'internet') result = result.filter(g => g.category === 'Internet')
     
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase()
@@ -164,8 +167,8 @@ function App() {
             <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 text-left">
               <div className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shrink-0"></div>
-                <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest leading-none">
-                  Critical Error: Mainframe Sync Failed. Database is unreachable.
+                <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest leading-none text-left">
+                  Critical Error: Mainframe Sync Failed. Database Unreachable.
                 </p>
               </div>
               <button 
@@ -180,12 +183,10 @@ function App() {
       </AnimatePresence>
 
       <div className="text-center mb-16 space-y-4">
-        <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white italic">
-          RHYTHM<span className="text-blue-600">HUB</span>
-        </h1>
-        <p className="text-gray-500 max-w-2xl mx-auto font-medium text-[10px] uppercase tracking-[0.4em] leading-loose text-left">
-          Quality MOD APK curation platform. <br/>
-          Safe download, easy installation, regular updates.
+        <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white italic">RHYTHM<span className="text-blue-600">HUB</span></h1>
+        <p className="text-gray-500 max-w-2xl mx-auto font-medium text-[10px] uppercase tracking-[0.4em] leading-loose text-center">
+          Platform kurasi MOD APK khusus game rhythm dengan standar kualitas komunitas. <br/>
+          Download gratis, aman, dan terupdate.
         </p>
       </div>
 
@@ -201,7 +202,6 @@ function App() {
             </div>
           ) : (
             <div className="space-y-12">
-              {/* PASS DATABASE STATUS TO GRID */}
               <GameGrid 
                 games={paginatedGames} 
                 onDownload={handleDownloadIntent} 
@@ -216,27 +216,33 @@ function App() {
             className="bg-red-950/10 border border-red-900/30 rounded-2xl p-6 mt-12 cursor-pointer hover:bg-red-900/20 transition-all group text-left"
           >
             <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest leading-relaxed">
-              Warning: Project Sekai has high ban risk. Read the Safety Guide for risk mitigation. <br/>
-              <span className="text-white underline group-hover:text-blue-400 font-black">[ Open Safety Guide Here ]</span>
+              Peringatan: Project Sekai berisiko tinggi banned. Baca Safety Guide untuk mitigasi risiko. <br/>
+              <span className="text-white underline group-hover:text-blue-400 font-black uppercase">[ Buka Safety Guide Disini ]</span>
             </p>
           </div>
         </div>
 
         <aside className="lg:col-span-4 xl:col-span-3 space-y-8 relative z-[40]">
           <div className="sticky top-28 space-y-8">
-            {/* DAILY SPOTLIGHT INTEGRATION */}
             <DailyCard dailyContent={dailyContent} />
 
-            <div className="bg-[#161b2c]/40 border border-white/5 rounded-3xl p-6 backdrop-blur-xl text-left text-left">
-               <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-4 block leading-none">System Status</span>
+            <div className="bg-[#161b2c]/40 border border-white/5 rounded-3xl p-6 backdrop-blur-xl text-left">
+               <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-4 block leading-none text-left">System Status</span>
                <div className="space-y-3 font-bold text-[10px]">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center text-left">
                     <span className="text-gray-500 uppercase tracking-widest">Total Items</span>
                     <span className="text-white">{games.length}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500 uppercase tracking-widest">Encryption</span>
-                    <span className="text-blue-500">Active</span>
+                  
+                  {/* Authorized Personnel Stats */}
+                  <div className="flex justify-between items-center text-left border-t border-white/5 pt-3 text-left">
+                    <span className="text-blue-500/50 uppercase tracking-tighter">Authorized Personnel</span>
+                    <span className="text-blue-400 font-mono italic">[{userStats}]</span>
+                  </div>
+
+                  <div className="flex justify-between items-center text-left text-left">
+                    <span className="text-gray-500 uppercase tracking-widest">Mainframe</span>
+                    <span className={databaseStatus === 'online' ? 'text-green-500 font-mono' : 'text-red-500 font-mono'}>{databaseStatus.toUpperCase()}</span>
                   </div>
                </div>
             </div>
@@ -255,51 +261,64 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#0f111a] text-white selection:bg-blue-500/30 font-sans">
-      <Navbar 
-        navigateTo={navigateTo} 
-        activePage={currentPageState} 
-        user={session} 
-        onLogout={() => { localStorage.removeItem('hub_session'); setSession(null); }} 
-        dbStatus={databaseStatus} // Pass to Navbar
-      />
-      <main className="container mx-auto px-4 py-12 max-w-7xl relative z-10 text-left">
+      <Navbar navigateTo={navigateTo} activePage={currentPageState} user={session} onLogout={() => { localStorage.removeItem('hub_session'); setSession(null); }} dbStatus={databaseStatus} />
+      
+      <main className="container mx-auto px-4 py-12 max-w-7xl relative z-10 text-left text-left">
         <AnimatePresence mode="wait">{renderContent()}</AnimatePresence>
       </main>
+      
       <footer className="bg-[#0b0d14] border-t border-gray-800/50 mt-32 pt-20 pb-10 relative z-10 text-left">
         <div className="container mx-auto px-4 max-w-7xl space-y-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-left">
-            <div className="space-y-5">
+            <div className="space-y-5 text-left text-left">
               <div className="flex items-center gap-3">
                 <img src="https://files.catbox.moe/ce6atq.jpg" alt="Logo" className="w-10 h-10 rounded-xl object-cover border border-gray-800" />
-                <span className="font-black text-xl tracking-tighter uppercase text-white italic">RHYTHM<span className="text-blue-500">HUB</span></span>
+                <span className="font-black text-xl tracking-tighter uppercase text-white italic">RHYTHM<span className="text-blue-600">HUB</span></span>
               </div>
-              <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-widest text-left">The best MOD APK curation with community security standards.</p>
+              <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-widest text-left">
+                Platform kurasi MOD APK khusus game rhythm dengan standar kualitas komunitas. Download gratis, aman, dan terupdate.
+              </p>
             </div>
-            {[
-              { title: 'Navigation', links: [{ n: 'Home', p: '/' }, { n: 'About', p: '/about' }, { n: 'Request', p: '/request' }, { n: 'Safety Guide', p: '/pjsk-guide' }] },
-              { title: 'Library', links: [{ n: 'JP Version', f: 'jp' }, { n: 'AI Mods', f: 'ai' }, { n: 'Internet Tool', f: 'internet' }, { n: 'Showcase', p: '/showcase' }] },
-              { title: 'Legal', links: [{ n: 'Privacy', p: '/privacy' }, { n: 'Terms', p: '/terms' }] }
-            ].map((col, i) => (
-              <div key={i} className="space-y-5 text-left">
-                <h4 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{col.title}</h4>
-                <ul className="space-y-3">
-                  {col.links.map((l, j) => (
-                    <li key={j}>
-                      <button onClick={() => { if(l.p) navigateTo(l.p); if(l.f) { setFilter(l.f); navigateTo('/'); } }} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest">{l.n}</button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+
+            <div className="space-y-5 text-left">
+              <h4 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Navigation</h4>
+              <ul className="space-y-3">
+                <li><button onClick={() => navigateTo('/')} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest">Home</button></li>
+                <li><button onClick={() => navigateTo('/about')} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest">About</button></li>
+                <li><button onClick={() => navigateTo('/request')} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest">Request</button></li>
+                <li><button onClick={() => navigateTo('/pjsk-guide')} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest">Safety Guide</button></li>
+              </ul>
+            </div>
+
+            <div className="space-y-5 text-left text-left">
+              <h4 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Library</h4>
+              <ul className="space-y-3">
+                <li><button onClick={() => { setFilter('jp'); navigateTo('/'); }} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest text-left">JP Version</button></li>
+                <li><button onClick={() => { setFilter('ai'); navigateTo('/'); }} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest text-left">AI Mods</button></li>
+                <li><button onClick={() => { setFilter('internet'); navigateTo('/'); }} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest text-left">Internet Tool</button></li>
+                <li><button onClick={() => navigateTo('/showcase')} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest text-left text-left">Showcase</button></li>
+              </ul>
+            </div>
+
+            <div className="space-y-5 text-left text-left">
+              <h4 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Legal</h4>
+              <ul className="space-y-3">
+                <li><button onClick={() => navigateTo('/privacy')} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest text-left">Privacy</button></li>
+                <li><button onClick={() => navigateTo('/terms')} className="text-[10px] text-gray-600 hover:text-blue-500 font-bold uppercase transition-colors tracking-widest text-left text-left">Terms</button></li>
+              </ul>
+            </div>
           </div>
-          <div className="pt-10 border-t border-gray-800/50 text-[9px] font-bold text-gray-700 uppercase tracking-[0.3em] text-left">
-            <p>© 2026 RhythmHub. Secured Database System.</p>
+          
+          <div className="pt-10 border-t border-gray-800/50 text-[9px] font-bold text-gray-700 uppercase tracking-[0.3em] text-left text-left">
+            <p>© 2026 RhythmHub. Secured Mainframe Database System.</p>
           </div>
         </div>
       </footer>
+
       <ActivityLog />
       <MusicPlayer />
     </div>
   )
 }
+
 export default App;
