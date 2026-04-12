@@ -2,94 +2,71 @@ import { motion } from 'framer-motion'
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#09090b] text-[#fafafa] font-sans flex items-center justify-center px-6 selection:bg-blue-500/30">
+    <div className="min-h-screen bg-[#09090b] text-[#fafafa] font-sans flex items-center justify-center px-6 selection:bg-blue-600/30">
       
       <motion.div 
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-2xl"
+        className="w-full max-w-xl"
       >
-        {/* Logo Section - Modernized */}
-        <div className="mb-12 flex justify-start items-center gap-5">
-          <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.05)]">
-            <span className="text-2xl font-black tracking-tighter uppercase text-black italic">
+        {/* Brand Header */}
+        <header className="flex items-center gap-5 mb-16">
+          <div className="w-14 h-14 rounded-xl bg-white flex items-center justify-center shadow-xl">
+            <span className="text-xl font-black italic tracking-tighter text-black">
               R<span className="text-blue-600">H</span>
             </span>
           </div>
-          <div className="h-10 w-[1px] bg-zinc-800" />
-          <div>
-            <h1 className="text-3xl font-black tracking-tighter uppercase text-white italic">
+          <div className="h-6 w-[1px] bg-zinc-800" />
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
               RHYTHM<span className="text-blue-600">HUB</span>
             </h1>
+            <span className="text-[10px] font-bold tracking-[0.3em] text-zinc-500 uppercase">
+              Official Platform
+            </span>
           </div>
-        </div>
-        
-        {/* Maintenance Badge - Simplified */}
-        <div className="inline-block mb-8">
-          <div className="bg-blue-500/5 border border-blue-500/20 rounded-md px-3 py-1 flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-            <p className="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em]">
-              Platform Maintenance
-            </p>
-          </div>
-        </div>
+        </header>
 
-        {/* Main Message */}
-        <p className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-8">
-          Temporarily Unavailable
-        </p>
-        
-        {/* Professional Explanation - Modern Layout */}
-        <div className="grid gap-8 mb-12">
-          <p className="text-zinc-400 text-lg leading-relaxed font-light border-l-2 border-zinc-800 pl-6">
-            RhythmHub is currently undergoing a comprehensive security enhancement and database maintenance procedure.
-          </p>
-          
+        {/* Hero Section */}
+        <section className="space-y-8">
           <div className="space-y-4">
-            <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">
-              This scheduled maintenance includes:
+            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-white leading-tight">
+              Maintenance <br />
+              <span className="text-zinc-500 italic font-light font-serif">in progress.</span>
+            </h2>
+            
+            <div className="h-1 w-12 bg-blue-600 rounded-full" />
+          </div>
+
+          <div className="space-y-6">
+            <p className="text-zinc-400 text-lg leading-relaxed font-light">
+              RhythmHub is currently undergoing a comprehensive security enhancement and database maintenance procedure to ensure the best experience for our community.
             </p>
             
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-zinc-400 text-sm leading-relaxed">
-              {[
-                "Security protocol upgrade across all systems",
-                "Database integrity verification and restoration",
-                "Server infrastructure reconfiguration",
-                "Implementation of enhanced protection layers",
-                "Full system backup and recovery testing"
-              ].map((item, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <span className="text-blue-600 font-bold mt-[-2px]">/</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <p className="text-zinc-500 text-sm leading-relaxed max-w-md">
+              All platform features, including authentication and content access, are temporarily suspended. We appreciate your patience as we strengthen our infrastructure.
+            </p>
+          </div>
+        </section>
+
+        {/* Footer Subtle */}
+        <footer className="mt-24 pt-10 border-t border-zinc-900 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+          <div className="flex items-center gap-3">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+            <span className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.2em]">
+              System Upgrade v3.0
+            </span>
           </div>
           
-          <div className="space-y-4 pt-4 border-t border-zinc-900">
-            <p className="text-zinc-500 text-sm leading-relaxed">
-              During this process, all platform features including game downloads, user authentication, 
-              and content access are temporarily suspended to ensure data integrity and system security.
-            </p>
-            
-            <p className="text-zinc-400 text-sm leading-relaxed italic">
-              We appreciate your understanding and patience as we work to provide you with a more secure 
-              and reliable platform experience.
+          <div className="flex items-center gap-4">
+            <p className="text-[10px] text-zinc-700 font-medium uppercase tracking-widest">
+              © 2026 RhythmHub Collective
             </p>
           </div>
-        </div>
-
-        {/* Status Section - Replaces the Loading Bounces */}
-        <div className="flex items-center gap-4 mb-12">
-           <div className="flex gap-1">
-              <div className="w-1 h-4 bg-blue-600/30 rounded-full animate-[pulse_1s_ease-in-out_infinite]" />
-              <div className="w-1 h-4 bg-blue-600/60 rounded-full animate-[pulse_1.2s_ease-in-out_infinite]" />
-              <div className="w-1 h-4 bg-blue-600 rounded-full animate-[pulse_1.4s_ease-in-out_infinite]" />
-           </div>
-           <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-[0.3em]">Restoring Services</span>
-        </div>
+        </footer>
       </motion.div>
+
     </div>
   )
 }
