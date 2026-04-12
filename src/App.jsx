@@ -48,23 +48,17 @@ function App() {
               All platform features, including authentication and content access, are temporarily suspended. We appreciate your patience as we strengthen our infrastructure.
             </p>
           </div>
-        </section>
 
-        {/* Footer Subtle */}
-        <footer className="mt-24 pt-10 border-t border-zinc-900 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-          <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-            <span className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.2em]">
-              System Upgrade v3.0
-            </span>
+          {/* Personal Commitment Tag */}
+          <div className="pt-6">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-lg bg-zinc-900/50 border border-zinc-800 shadow-sm">
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-[0.2em] italic">
+                I will do my best
+              </span>
+            </div>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <p className="text-[10px] text-zinc-700 font-medium uppercase tracking-widest">
-              © 2026 RhythmHub Collective
-            </p>
-          </div>
-        </footer>
+        </section>
       </motion.div>
 
     </div>
