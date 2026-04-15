@@ -1,68 +1,141 @@
-import { motion } from 'framer-motion'
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-function App() {
-  return (
-    <div className="min-h-screen bg-[#09090b] text-[#fafafa] font-sans flex items-center justify-center px-6 selection:bg-blue-600/30">
-      
-      <motion.div 
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-xl"
-      >
-        {/* Brand Header */}
-        <header className="flex items-center gap-5 mb-16">
-          <div className="w-14 h-14 rounded-xl bg-white flex items-center justify-center shadow-xl">
-            <span className="text-xl font-black italic tracking-tighter text-black">
-              R<span className="text-blue-600">H</span>
-            </span>
-          </div>
-          <div className="h-6 w-[1px] bg-zinc-800" />
-          <div className="flex flex-col">
-            <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
-              RHYTHM<span className="text-blue-600">HUB</span>
-            </h1>
-            <span className="text-[10px] font-bold tracking-[0.3em] text-zinc-500 uppercase">
-              Official Platform
-            </span>
-          </div>
-        </header>
+/**
+ * RHYTHMHUB EXECUTIVE DARK INTERFACE
+ * Aesthetic: Minimal, Premium, Professional.
+ * No cyber elements, no emoji, focus on structure and space.
+ */
 
-        {/* Hero Section */}
-        <section className="space-y-8">
-          <div className="space-y-4">
-            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-white leading-tight">
-              Maintenance <br />
-              <span className="text-zinc-500 italic font-light font-serif">in progress.</span>
-            </h2>
-            
-            <div className="h-1 w-12 bg-blue-600 rounded-full" />
-          </div>
+const App = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const ENCRYPTED_LINK = "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL3dieDVpcXM3eDBqeTlkNC/jgq/jg6bjg6vjg6NfNi40LjEuYXBrL2ZpbGU=";
 
-          <div className="space-y-6">
-            <p className="text-zinc-400 text-lg leading-relaxed font-light">
-              RhythmHub is currently undergoing a comprehensive security enhancement and database maintenance procedure to ensure the best experience for our community.
-            </p>
-            
-            <p className="text-zinc-500 text-sm leading-relaxed max-w-md">
-              All platform features, including authentication and content access, are temporarily suspended. We appreciate your patience as we strengthen our infrastructure.
-            </p>
-          </div>
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
 
-          {/* Personal Commitment Tag */}
-          <div className="pt-6">
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-lg bg-zinc-900/50 border border-zinc-800 shadow-sm">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-[0.2em] italic">
-                I will do my best
-              </span>
-            </div>
-          </div>
-        </section>
-      </motion.div>
+  const handleDownload = () => {
+    try {
+      const decodedLink = atob(ENCRYPTED_LINK);
+      window.open(decodedLink, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      console.error("System Error: Reference link invalid.");
+    }
+  };
 
+  // Calm Status Badge Component
+  const SystemStatus = () => (
+    <div className="flex justify-center mb-12">
+      <div className="inline-flex items-center gap-3 px-5 py-2 bg-[#1e1e20] border border-[#2d2d30] rounded-full">
+        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+        <span className="text-[10px] font-semibold tracking-[0.25em] uppercase text-[#a1a1aa]">
+          Internal Maintenance Mode
+        </span>
+      </div>
     </div>
-  )
-}
+  );
+
+  // Technical Information Component
+  const technicalSpecs = [
+    { label: "Core Version", value: "6.4.1" },
+    { label: "Regional Build", value: "Japan (JP)" },
+    { label: "Package Type", value: "Modified Application (PJSK MOD)" },
+    { label: "Encryption", value: "Verified SHA-256" }
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0b] text-[#e4e4e7] font-sans selection:bg-blue-500/30">
+      <AnimatePresence>
+        {isLoaded && (
+          <motion.main 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="relative min-h-screen flex flex-col items-center justify-center px-6 py-12"
+          >
+            {/* Subtle Background Decoration - Not Cyber */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[500px] bg-blue-600/5 blur-[120px] pointer-events-none" />
+
+            <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+              
+              {/* Left Side: Branding & Main Message */}
+              <div className="lg:col-span-7">
+                <SystemStatus />
+                
+                <h1 className="text-6xl md:text-8xl font-light tracking-tighter mb-8 text-center lg:text-left">
+                  Rhythm<span className="font-bold text-white">Hub</span>
+                </h1>
+
+                <div className="space-y-6 text-[#a1a1aa] leading-relaxed text-lg font-light text-center lg:text-left">
+                  <p>
+                    Our platform is currently undergoing routine infrastructure upgrades to ensure 
+                    long-term service stability for all users.
+                  </p>
+                  <p className="text-sm border-l-2 border-[#2d2d30] pl-6 py-2 italic text-[#71717a]">
+                    All public functionalities are temporarily disabled to maintain data integrity 
+                    during the server migration process.
+                  </p>
+                </div>
+
+                {/* Technical Grid */}
+                <div className="mt-12 grid grid-cols-2 gap-8 border-t border-[#1e1e20] pt-10">
+                  {technicalSpecs.map((spec, i) => (
+                    <div key={i} className="flex flex-col gap-1">
+                      <span className="text-[10px] uppercase tracking-widest text-[#52525b] font-bold">
+                        {spec.label}
+                      </span>
+                      <span className="text-sm font-medium text-[#d4d4d8]">
+                        {spec.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Side: Access Control */}
+              <div className="lg:col-span-5 w-full">
+                <div className="bg-[#111113] border border-[#1e1e20] p-10 rounded-[32px] shadow-2xl overflow-hidden relative group">
+                  <h2 className="text-xl font-semibold text-white mb-2">Manual Access</h2>
+                  <p className="text-sm text-[#71717a] mb-10 leading-relaxed">
+                    PJSK MOD installation package v6.4.1 is available for limited testing during maintenance.
+                  </p>
+
+                  <div className="space-y-4">
+                    <button
+                      onClick={handleDownload}
+                      className="w-full py-5 bg-white text-black hover:bg-[#e4e4e7] rounded-2xl font-bold text-xs tracking-[0.15em] uppercase transition-all duration-500 shadow-[0_0_40px_rgba(255,255,255,0.05)] active:scale-[0.98]"
+                    >
+                      Start Download
+                    </button>
+                    
+                    <div className="pt-6 text-center">
+                      <div className="inline-flex items-center gap-2 text-[10px] text-[#52525b] uppercase tracking-widest font-bold">
+                        <span>Verified Security Build</span>
+                        <div className="w-1 h-1 rounded-full bg-[#2d2d30]" />
+                        <span>Apr 2026</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Elegant Static Hover Effect */}
+                  <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                </div>
+
+                <div className="mt-8 px-6 text-center lg:text-left">
+                  <p className="text-[11px] text-[#3f3f46] leading-relaxed font-medium uppercase tracking-tighter">
+                    All system activities are monitored internally.<br />
+                    Thank you for your understanding.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </motion.main>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 export default App;
