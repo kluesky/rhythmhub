@@ -1,1 +1,141 @@
-import React,{useState as a,useEffect as b}from 'react';import {motion as c,AnimatePresence as d}from 'framer-motion';const e=()=>{const[f,g]=a(false);const h="aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL3dieDVpcXM3eDBqeTlkNC/jgq/jg6bjg6vjg6NfNi40LjEuYXBrL2ZpbGU=";b(()=>{g(true)},[]);const i=()=>{try{const j=atob(h);window.open(j,"_blank","noopener,noreferrer")}catch(k){console.error("System Error")}};const l=()=>c.div({className:"flex justify-center mb-12"},c.div({className:"inline-flex items-center gap-3 px-5 py-2 bg-[#1e1e20] border border-[#2d2d30] rounded-full"},c.div({className:"w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"}),c.span({className:"text-[10px] font-semibold tracking-[0.25em] uppercase text-[#a1a1aa]"}}));const m=[{label:"Core Version",value:"6.4.1"},{label:"Regional Build",value:"Japan (JP)"},{label:"Package Type",value:"Modified Application (PJSK MOD)"},{label:"Encryption",value:"Verified SHA-256"}];return c.div({className:"min-h-screen bg-[#0a0a0b] text-[#e4e4e7] font-sans selection:bg-blue-500/30"},c.createElement(d,null,f&&c.createElement(c.main,{initial:{opacity:0,y:10},animate:{opacity:1,y:0},transition:{duration:1,ease:[0.16,1,0.3,1]},className:"relative min-h-screen flex flex-col items-center justify-center px-6 py-12"},c.div({className:"absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[500px] bg-blue-600/5 blur-[120px] pointer-events-none"}),c.div({className:"w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-16 items-center"},c.div({className:"lg:col-span-7"},l(),c.h1({className:"text-6xl md:text-8xl font-light tracking-tighter mb-8 text-center lg:text-left"},"Rhythm",c.span({className:"font-bold text-white"},"Hub")),c.div({className:"space-y-6 text-[#a1a1aa] leading-relaxed text-lg font-light text-center lg:text-left"},c.p(null,"Our platform is currently undergoing routine infrastructure upgrades to ensure long-term service stability for all users."),c.p({className:"text-sm border-l-2 border-[#2d2d30] pl-6 py-2 italic text-[#71717a]"},c.span(null,"All public functionalities are temporarily disabled to maintain data integrity during the server migration process."))),c.div({className:"mt-12 grid grid-cols-2 gap-8 border-t border-[#1e1e20] pt-10"},m.map((n,o)=>c.div({key:o,className:"flex flex-col gap-1"},c.span({className:"text-[10px] uppercase tracking-widest text-[#52525b] font-bold"},n.label),c.span({className:"text-sm font-medium text-[#d4d4d8]"},n.value)))),c.div({className:"lg:col-span-5 w-full"},c.div({className:"bg-[#111113] border border-[#1e1e20] p-10 rounded-[32px] shadow-2xl overflow-hidden relative group"},c.h2({className:"text-xl font-semibold text-white mb-2"},"Manual Access"),c.p({className:"text-sm text-[#71717a] mb-10 leading-relaxed"},"PJSK MOD installation package v6.4.1 is available for limited testing during maintenance."),c.div({className:"space-y-4"},c.button({onClick:i,className:"w-full py-5 bg-white text-black hover:bg-[#e4e4e7] rounded-2xl font-bold text-xs tracking-[0.15em] uppercase transition-all duration-500 shadow-[0_0_40px_rgba(255,255,255,0.05)] active:scale-[0.98]"},c.span(null,"Start Download")),c.div({className:"pt-6 text-center"},c.div({className:"inline-flex items-center gap-2 text-[10px] text-[#52525b] uppercase tracking-widest font-bold"},c.span(null,"Verified Security Build"),c.div({className:"w-1 h-1 rounded-full bg-[#2d2d30]"}),c.span(null,"Apr 2026")))),c.div({className:"absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"})),c.div({className:"mt-8 px-6 text-center lg:text-left"},c.p({className:"text-[11px] text-[#3f3f46] leading-relaxed font-medium uppercase tracking-tighter"},"All system activities are monitored internally.",c.br(),"Thank you for your understanding.")))))))};export default e;
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+/**
+ * RHYTHMHUB EXECUTIVE DARK INTERFACE
+ * Aesthetic: Minimal, Premium, Professional.
+ * No cyber elements, no emoji, focus on structure and space.
+ */
+
+const App = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const ENCRYPTED_LINK = "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL3dieDVpcXM3eDBqeTlkNC/jgq/jg6bjg6vjg6NfNi40LjEuYXBrL2ZpbGU=";
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const handleDownload = () => {
+    try {
+      const decodedLink = atob(ENCRYPTED_LINK);
+      window.open(decodedLink, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      console.error("System Error: Reference link invalid.");
+    }
+  };
+
+  // Calm Status Badge Component
+  const SystemStatus = () => (
+    <div className="flex justify-center mb-12">
+      <div className="inline-flex items-center gap-3 px-5 py-2 bg-[#1e1e20] border border-[#2d2d30] rounded-full">
+        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+        <span className="text-[10px] font-semibold tracking-[0.25em] uppercase text-[#a1a1aa]">
+          Internal Maintenance Mode
+        </span>
+      </div>
+    </div>
+  );
+
+  // Technical Information Component
+  const technicalSpecs = [
+    { label: "Core Version", value: "6.4.1" },
+    { label: "Regional Build", value: "Japan (JP)" },
+    { label: "Package Type", value: "Modified Application (PJSK MOD)" },
+    { label: "Encryption", value: "Verified SHA-256" }
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0b] text-[#e4e4e7] font-sans selection:bg-blue-500/30">
+      <AnimatePresence>
+        {isLoaded && (
+          <motion.main 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="relative min-h-screen flex flex-col items-center justify-center px-6 py-12"
+          >
+            {/* Subtle Background Decoration - Not Cyber */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[500px] bg-blue-600/5 blur-[120px] pointer-events-none" />
+
+            <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+              
+              {/* Left Side: Branding & Main Message */}
+              <div className="lg:col-span-7">
+                <SystemStatus />
+                
+                <h1 className="text-6xl md:text-8xl font-light tracking-tighter mb-8 text-center lg:text-left">
+                  Rhythm<span className="font-bold text-white">Hub</span>
+                </h1>
+
+                <div className="space-y-6 text-[#a1a1aa] leading-relaxed text-lg font-light text-center lg:text-left">
+                  <p>
+                    Our platform is currently undergoing routine infrastructure upgrades to ensure 
+                    long-term service stability for all users.
+                  </p>
+                  <p className="text-sm border-l-2 border-[#2d2d30] pl-6 py-2 italic text-[#71717a]">
+                    All public functionalities are temporarily disabled to maintain data integrity 
+                    during the server migration process.
+                  </p>
+                </div>
+
+                {/* Technical Grid */}
+                <div className="mt-12 grid grid-cols-2 gap-8 border-t border-[#1e1e20] pt-10">
+                  {technicalSpecs.map((spec, i) => (
+                    <div key={i} className="flex flex-col gap-1">
+                      <span className="text-[10px] uppercase tracking-widest text-[#52525b] font-bold">
+                        {spec.label}
+                      </span>
+                      <span className="text-sm font-medium text-[#d4d4d8]">
+                        {spec.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Side: Access Control */}
+              <div className="lg:col-span-5 w-full">
+                <div className="bg-[#111113] border border-[#1e1e20] p-10 rounded-[32px] shadow-2xl overflow-hidden relative group">
+                  <h2 className="text-xl font-semibold text-white mb-2">Manual Access</h2>
+                  <p className="text-sm text-[#71717a] mb-10 leading-relaxed">
+                    PJSK MOD installation package v6.4.1 is available for limited testing during maintenance.
+                  </p>
+
+                  <div className="space-y-4">
+                    <button
+                      onClick={handleDownload}
+                      className="w-full py-5 bg-white text-black hover:bg-[#e4e4e7] rounded-2xl font-bold text-xs tracking-[0.15em] uppercase transition-all duration-500 shadow-[0_0_40px_rgba(255,255,255,0.05)] active:scale-[0.98]"
+                    >
+                      Start Download
+                    </button>
+                    
+                    <div className="pt-6 text-center">
+                      <div className="inline-flex items-center gap-2 text-[10px] text-[#52525b] uppercase tracking-widest font-bold">
+                        <span>Verified Security Build</span>
+                        <div className="w-1 h-1 rounded-full bg-[#2d2d30]" />
+                        <span>Apr 2026</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Elegant Static Hover Effect */}
+                  <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                </div>
+
+                <div className="mt-8 px-6 text-center lg:text-left">
+                  <p className="text-[11px] text-[#3f3f46] leading-relaxed font-medium uppercase tracking-tighter">
+                    All system activities are monitored internally.<br />
+                    Thank you for your understanding.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </motion.main>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default App;
